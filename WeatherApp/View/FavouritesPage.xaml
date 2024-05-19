@@ -29,8 +29,6 @@
                        TextChanged="OnTextChanged"
                         Placeholder="Search locations..."
                         Background="{StaticResource Primary}"
-                        SearchCommand="{Binding SearchCityCommand}"
-                        SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" 
                         />
             <CollectionView ItemsLayout="VerticalList"
                 ItemsSource="{Binding SearchResults}"

@@ -66,29 +66,20 @@ public partial class FavouritesViewModel : BaseViewModel
     
 
     [RelayCommand]
-    void SearchCity(string cityName)
+    public void SearchCity(string cityName)
     {
         try
         {
             SearchResults.Clear();
-            IsBusy = true;
             // Tries to get data for entered city
             var data = _weatherService.GetCurrentData(cityName);
 
             data.Location.Localtime = data.Location.Localtime.Substring(11);
             SearchResults.Add(data);
         }
-        catch (Exception e)
+        catch
         {
-            var exceptionMsg = e.Message;
-
-            if (e.Source == "WeatherAPI.Standard") exceptionMsg = "Invalid city name!";
-
-            _alertService.DisplayAlert(Title, exceptionMsg, "Ok");
-        }
-        finally
-        {
-            IsBusy = false;
+            SearchResults.Clear();
         }
     }
 
