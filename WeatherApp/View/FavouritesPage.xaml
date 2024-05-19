@@ -26,10 +26,52 @@
 
         <VerticalStackLayout IsVisible="{Binding IsNotBusy}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0">
             <SearchBar x:Name="searchBar"
+                       TextChanged="OnTextChanged"
                         Placeholder="Search locations..."
                         Background="{StaticResource Primary}"
-                        SearchCommand="{Binding SaveCityCommand}"
-                        SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
+                        />
+            <CollectionView ItemsLayout="VerticalList"
+                ItemsSource="{Binding SearchResults}"
+                VerticalScrollBarVisibility="Never"
+                HorizontalScrollBarVisibility="Never">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:CurrentJsonResponse">
+                        <Frame BorderColor="#2A2C53"
+                               CornerRadius="5"
+                               Padding="5"
+                               Margin="10, 5"
+                               BackgroundColor="#1E1E45">
+                            <FlexLayout AlignContent="Center"
+                                        JustifyContent="SpaceBetween"
+                                        HeightRequest="70">
+                                <VerticalStackLayout Margin="10, 0, 0, 0">
+                                    <Label Text="{Binding Location.Name}"
+                                           FontSize="24"
+                                           FontFamily="PoppinsSemibold"
+                                           HorizontalTextAlignment="Center"/>
+                                    <Label Text="{Binding Location.Country}"
+                                           FontSize="12"
+                                           TextColor="{StaticResource Secondary}"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                                <Button Text="Save City"
+                                        TextColor="White"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        FontSize="14"
+                                        FontFamily="PoppinsMedium"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Margin="0, 0, 10, 0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=SaveCityCommand}"
+                                        CommandParameter="{Binding Location.Name}" />
+                            </FlexLayout>
+                        </Frame>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
 
             <CollectionView ItemsLayout="VerticalList"
                             ItemsSource="{Binding FavouriteLocations}"
