@@ -5,18 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:view="clr-namespace:WeatherApp.View">
 
-    <TabBar>
-        <Tab Title="Home" Icon="home.png" Route="HomePage">
-            <ShellContent ContentTemplate="{DataTemplate view:HomePage}" />
-        </Tab>
-
-        <Tab Title="Locations" Icon="favourite.png" Route="FavouritesPage">
-            <ShellContent ContentTemplate="{DataTemplate view:FavouritesPage}" />
-        </Tab>
-
-        <Tab Title="About" Icon="about.png" Route="AboutPage">
-            <ShellContent ContentTemplate="{DataTemplate view:AboutPage}" />
-        </Tab>
-    </TabBar>
+    <FlyoutItem Title="Menu" FlyoutDisplayOptions="AsSingleItem">
+        <ShellContent Route="HomePage" ContentTemplate="{DataTemplate view:HomePage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Favourites" FlyoutDisplayOptions="AsMultipleItems">
+        <ShellContent Route="FavouritesPage" ContentTemplate="{DataTemplate view:FavouritesPage}" />
+    </FlyoutItem>
+    
 </Shell>
-

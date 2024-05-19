@@ -37,6 +37,12 @@ public partial class HomeViewModel : BaseViewModel
         _weatherService = weatherService;
         _alertService = alertService;
     }
+    [RelayCommand]
+    private async Task ToggleFavorites()
+    {
+        // Toggle between displaying the Home page and the Favorites page
+        await Shell.Current.GoToAsync("//FavouritesPage");
+    }
 
     // Overrides OnAppearing event so the API is not called until query params are read
     [RelayCommand]
@@ -94,7 +100,6 @@ public partial class HomeViewModel : BaseViewModel
         SetDaysNames(forecastDays);
         WeatherForecastDays = forecastDays;
     }
-
     static void SetDaysNames(ObservableCollection<Forecastday> forecastDays)
     {
         foreach (var day in forecastDays)

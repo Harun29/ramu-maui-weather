@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WeatherApp.View.HomePage"
              xmlns:viewmodel="clr-namespace:WeatherApp.ViewModel"
@@ -13,7 +12,98 @@
         <toolkit:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
     </ContentPage.Behaviors>
 
-    <Grid RowSpacing="0">
+    <StackLayout>
+        <HorizontalStackLayout Margin="20, 20, 0, 0">
+            <ImageButton Source="menu.png" HeightRequest="50" WidthRequest="30" Command="{Binding ToggleFavoritesCommand}"/>
+        </HorizontalStackLayout>
+
+        <VerticalStackLayout HorizontalOptions="Center" Margin="0, 10, 0, 0">
+            <Frame Padding="0" CornerRadius="200" HeightRequest="250" WidthRequest="250">
+                <Image HeightRequest="200" WidthRequest="200" Source="{Binding CurrentWeather.Condition.Icon, StringFormat='https:{0}'}"/>
+            </Frame>
+            <Label Text="{Binding CurrentWeather.TempC, StringFormat='{0:F1}°'}" 
+                   HorizontalOptions="Center"
+                   Margin="0, 10, 0, 0"
+                   FontSize="60"
+                   FontFamily="Impact"
+                   FontAttributes="Bold"/>
+        </VerticalStackLayout>
+
+        <AbsoluteLayout Margin="0, 50, 0, 0" HeightRequest="400">
+            <Frame CornerRadius="50" BackgroundColor="#F59E42"
+                   AbsoluteLayout.LayoutFlags="All"
+                   AbsoluteLayout.LayoutBounds="0.5, 1, 1, 1" />
+            <Frame Margin="20, 50, 0, 0" WidthRequest="350"
+                   HeightRequest="260" CornerRadius="40" BackgroundColor="#FAB442">
+                <StackLayout>
+                    <Frame HeightRequest="70" Padding="10" BackgroundColor="#F59E42" CornerRadius="10">
+                        <HorizontalStackLayout>
+                            <Button Text="Hourly" Padding="0" WidthRequest="124" Margin="10, 0, 0, 0"
+                                    CornerRadius="10" HeightRequest="40" FontSize="18"
+                                    FontAttributes="Bold" BackgroundColor="#F38717"/>
+                            <Button Margin="20, 0, 0, 0" Text="Daily" Padding="0" 
+                                    WidthRequest="124" CornerRadius="10"
+                                    HeightRequest="40" FontSize="18" BackgroundColor="White"
+                                    TextColor="Black" FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+                    </Frame>
+                    <CollectionView IsVisible="{Binding IsNotBusy}"
+                                    HeightRequest="160"
+                                    ItemsSource="{Binding WeatherForecastHours}"
+                                    VerticalScrollBarVisibility="Never"
+                                    HorizontalScrollBarVisibility="Never">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Hour">
+                                <FlexLayout WidthRequest="100">
+                                    <Frame Background="#F38717"
+                                           CornerRadius="20"
+                                           WidthRequest="80"
+                                           HeightRequest="130"
+                                           Margin="10, 20, 10, 30"
+                                           Padding="0">
+                                        <VerticalStackLayout WidthRequest="80">
+                                            <Image WidthRequest="50"
+                                                   HeightRequest="50"
+                                                   Source="{Binding Condition.Icon, StringFormat='https:{0}'}"/>
+                                            <Label Text="{Binding Time, StringFormat='{0}'}"
+                                                   FontFamily="Calibri"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   FontSize="15" Margin="0, 3, 0, 0"/>
+                                            <Label Text="{Binding TempC, StringFormat='{0:F1} °C'}"
+                                                   FontSize="18"
+                                                   Margin="0, 10, 0, 0"
+                                                   FontFamily="Calibri" FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </FlexLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </Frame>
+            <Frame CornerRadius="25" BackgroundColor="White"
+                   HeightRequest="60" MinimumWidthRequest="200"
+                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                   AbsoluteLayout.LayoutBounds="0.5, 0, AutoSize, AutoSize" 
+                   Margin="0, -32, 0, 0"
+                   Padding="0">
+                <Label Text="{Binding CurrentLocation.Name}" 
+                       TextColor="#FAB442" 
+                       HorizontalTextAlignment="Center"
+                       FontFamily="Impact"
+                       FontAttributes="Bold"
+                       FontSize="30"
+                       Padding="0"
+                       Margin="0, 6, 0, 0"/>
+            </Frame>
+        </AbsoluteLayout>
+    </StackLayout>
+    <!--<Grid RowSpacing="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -23,9 +113,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
-
-        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Source="background" Aspect="AspectFill"/>
-
         <ActivityIndicator IsRunning="{Binding IsBusy}"
                            IsVisible="{Binding IsBusy}" />
 
@@ -238,5 +325,5 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </StackLayout>
-    </Grid>
+    </Grid>-->
 </ContentPage>

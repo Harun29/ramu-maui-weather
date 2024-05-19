@@ -62,6 +62,12 @@ public partial class FavouritesViewModel : BaseViewModel
 
         IsBusy = false;
     }
+    [RelayCommand]
+    async Task NavigateToHome()
+    {
+        // Navigate to the home page
+        await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+    }
 
     
 

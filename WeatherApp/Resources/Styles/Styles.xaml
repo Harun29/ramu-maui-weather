@@ -7,14 +7,12 @@
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
         <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="Shell.FlyoutBehavior" Value="Disabled" />
         <Setter Property="Shell.NavBarIsVisible" Value="False" />
         <Setter Property="Shell.NavBarHasShadow" Value="False" />
         <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
         <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource Tertiary}" />
         <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource White}" />
     </Style>
-
     <Style TargetType="ContentPage">
         <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
     </Style>
