@@ -16,6 +16,8 @@ public partial class FavouritesViewModel : BaseViewModel
 
     [ObservableProperty]
     ObservableCollection<CurrentJsonResponse> favouriteLocations;
+    [ObservableProperty]
+    ObservableCollection<CurrentJsonResponse> searchResults;
 
     public FavouritesViewModel(ILocationService locationService, IWeatherService weatherService,
         IAlertService alertService, IStorageService storageService)
@@ -27,6 +29,7 @@ public partial class FavouritesViewModel : BaseViewModel
         _alertService = alertService;
         _storageService = storageService;
 
+        SearchResults = new ObservableCollection<CurrentJsonResponse>();
         FavouriteLocations = new ObservableCollection<CurrentJsonResponse>();
         MainThread.InvokeOnMainThreadAsync(PopulateFavouritesList);
     }
@@ -64,6 +67,26 @@ public partial class FavouritesViewModel : BaseViewModel
     {
         // Navigate to the home page
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}");
+    }
+
+    
+
+    [RelayCommand]
+    public void SearchCity(string cityName)
+    {
+        try
+        {
+            SearchResults.Clear();
+            // Tries to get data for entered city
+            var data = _weatherService.GetCurrentData(cityName);
+
+            data.Location.Localtime = data.Location.Localtime.Substring(11);
+            SearchResults.Add(data);
+        }
+        catch
+        {
+            SearchResults.Clear();
+        }
     }
 
     [RelayCommand]
@@ -113,6 +136,7 @@ public partial class FavouritesViewModel : BaseViewModel
     [RelayCommand]
     async Task GoToCityData(string q)
     {
+
         if (q == null) return;
 
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}?location={q}", true);
