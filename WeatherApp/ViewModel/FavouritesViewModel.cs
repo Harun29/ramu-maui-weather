@@ -16,6 +16,8 @@ public partial class FavouritesViewModel : BaseViewModel
 
     [ObservableProperty]
     ObservableCollection<CurrentJsonResponse> favouriteLocations;
+    [ObservableProperty]
+    ObservableCollection<CurrentJsonResponse> searchResults;
 
     public FavouritesViewModel(ILocationService locationService, IWeatherService weatherService,
         IAlertService alertService, IStorageService storageService)
@@ -27,6 +29,7 @@ public partial class FavouritesViewModel : BaseViewModel
         _alertService = alertService;
         _storageService = storageService;
 
+        SearchResults = new ObservableCollection<CurrentJsonResponse>();
         FavouriteLocations = new ObservableCollection<CurrentJsonResponse>();
         MainThread.InvokeOnMainThreadAsync(PopulateFavouritesList);
     }
@@ -58,6 +61,35 @@ public partial class FavouritesViewModel : BaseViewModel
         }
 
         IsBusy = false;
+    }
+
+    
+
+    [RelayCommand]
+    void SearchCity(string cityName)
+    {
+        try
+        {
+            SearchResults.Clear();
+            IsBusy = true;
+            // Tries to get data for entered city
+            var data = _weatherService.GetCurrentData(cityName);
+
+            data.Location.Localtime = data.Location.Localtime.Substring(11);
+            SearchResults.Add(data);
+        }
+        catch (Exception e)
+        {
+            var exceptionMsg = e.Message;
+
+            if (e.Source == "WeatherAPI.Standard") exceptionMsg = "Invalid city name!";
+
+            _alertService.DisplayAlert(Title, exceptionMsg, "Ok");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
@@ -107,6 +139,7 @@ public partial class FavouritesViewModel : BaseViewModel
     [RelayCommand]
     async Task GoToCityData(string q)
     {
+
         if (q == null) return;
 
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}?location={q}", true);
