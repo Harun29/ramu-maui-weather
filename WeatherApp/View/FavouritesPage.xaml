@@ -1,104 +1,124 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="WeatherApp.View.FavouritesPage"
              xmlns:viewmodel="clr-namespace:WeatherApp.ViewModel"
              xmlns:models="clr-namespace:WeatherAPI.Standard.Models;assembly=WeatherAPI.Standard"
              x:DataType="viewmodel:FavouritesViewModel"
-             BackgroundColor="{StaticResource Primary}"
+             BackgroundColor="#F59E42"
              Title="Favourites">
+    <ScrollView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"/>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+            <VerticalStackLayout IsVisible="{Binding IsNotBusy}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0">
+                <HorizontalStackLayout VerticalOptions="Center" Margin="20, 20, 0, 0">
+                    <ImageButton 
+                        Source="arrow.png" 
+                        WidthRequest="30" 
+                        Padding="0" 
+                        Margin="0, 0, 20, 0"
+                        Command="{Binding NavigateToHomeCommand}"/>
+                    <Label 
+                        Text="Manage Cities"  
+                        FontSize="24" 
+                        FontAttributes="Bold" 
+                        FontFamily="Calibri" 
+                        Margin="0, 8, 0, 0"/>
+                </HorizontalStackLayout>
+                <Frame  CornerRadius="10"
+                        BackgroundColor="#BC670E"
+                        Padding="0"
+                        Margin="10"
+                        WidthRequest="360">
+                    <SearchBar      x:Name="searchBar"
+                                    Placeholder="Search Locations..."
+                                    SearchCommand="{Binding SaveCityCommand}"
+                                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" 
+                                    Margin="0, 0, 0, -2"
+                                    PlaceholderColor="White"
+                                    TextColor="White"/>
+                </Frame>
 
-        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="background" Aspect="AspectFill"/>
+                <Label Text="Recently Added"
+                       FontSize="24"
+                       Margin="20"
+                       FontAttributes="Bold"
+                       FontFamily="Calibri"/>
+                <CollectionView ItemsLayout="VerticalList"
+                                ItemsSource="{Binding FavouriteLocations}"
+                                VerticalScrollBarVisibility="Default"
+                                HorizontalScrollBarVisibility="Never">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:CurrentJsonResponse">
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem Text="Delete"
+                                                    IconImageSource="delete.png"
+                                                    BackgroundColor="red"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=DeleteLocationCommand}"
+                                                    CommandParameter="{Binding Location.Name}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <Frame Background="#BC670E"
+                                    BorderColor="#BC670E"
+                                    HeightRequest="140"
+                                    Margin="10, 10"
+                                    CornerRadius="20"
+                                    WidthRequest="360">
 
-        <ActivityIndicator IsRunning="{Binding IsBusy}"
-                           IsVisible="{Binding IsBusy}"/>
+                                    <Grid ColumnDefinitions="3*, 3*">
+                                        <VerticalStackLayout Grid.Column="0">
+                                            <VerticalStackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=GoToCityDataCommand}"
+                                                    CommandParameter="{Binding Location.Name}"/>
+                                            </VerticalStackLayout.GestureRecognizers>
 
-        <VerticalStackLayout IsVisible="{Binding IsNotBusy}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0">
-            <SearchBar x:Name="searchBar"
-                        Placeholder="Search locations..."
-                        Background="{StaticResource Primary}"
-                        SearchCommand="{Binding SaveCityCommand}"
-                        SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
-
-            <CollectionView ItemsLayout="VerticalList"
-                            ItemsSource="{Binding FavouriteLocations}"
-                            VerticalScrollBarVisibility="Never"
-                            HorizontalScrollBarVisibility="Never">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:CurrentJsonResponse">
-                        <SwipeView>
-                            <SwipeView.RightItems>
-                                <SwipeItems>
-                                    <SwipeItem Text="Delete"
-                                                IconImageSource="delete.png"
-                                                BackgroundColor="red"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=DeleteLocationCommand}"
-                                                CommandParameter="{Binding Location.Name}" />
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                            <Frame Background="#1E1E45"
-                                   BorderColor="#2A2C53"
-                                   HeightRequest="100"
-                                   Margin="10, 5">
-                                <Grid ColumnDefinitions="3*, 3*, *">
-                                    <VerticalStackLayout Grid.Column="0">
-                                        <VerticalStackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=GoToCityDataCommand}"
-                                                CommandParameter="{Binding Location.Name}"/>
-                                        </VerticalStackLayout.GestureRecognizers>
-
-                                        <Label Text="{Binding Location.Name}"
-                                               FontSize="24"
-                                               FontFamily="PoppinsSemibold"
-                                            HorizontalTextAlignment="Center"/>
-                                        <Label Text="{Binding Location.Country}"
-                                               FontSize="12"
-                                               TextColor="{StaticResource Secondary}"
-                                               HorizontalTextAlignment="Center"/>
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="1">
-                                        <Label Text="{Binding Current.TempC, StringFormat='{0:F1} °C'}"
-                                               FontFamily="PoppinsSemibold"
-                                               FontSize="20"
-                                               HorizontalTextAlignment="Center"/>
-
-                                        <Border Stroke="{StaticResource Tertiary}"
-                                                HorizontalOptions="Center">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="30" />
-                                            </Border.StrokeShape>
-
-                                            <Label Text="{Binding Current.Condition.Text}"
-                                                    FontFamily="PoppinsSemibold"
-                                                    Padding="5"
-                                                    FontSize="10"
-                                                    Background="{StaticResource Tertiary}"/>
-                                        </Border>
-                                    </VerticalStackLayout>
-
-                                    <Image WidthRequest="70"
-                                            HeightRequest="70"
-                                            Grid.Column="2"
-                                            Source="{Binding Current.Condition.Icon, StringFormat='https:{0}'}"/>
-                                </Grid>
-                            </Frame>
-                        </SwipeView>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-    </Grid>
+                                            <Label Text="{Binding Current.TempC, StringFormat='{0:F1}°'}"
+                                                FontSize="40"
+                                                FontFamily="Imprima"
+                                                HorizontalTextAlignment="Center"/>
+                                            <Label Text="{Binding Current.FeelslikeC, StringFormat='Feels like {0:F1} °C'}"
+                                                FontSize="13"
+                                                TextColor="{StaticResource Secondary}"
+                                                HorizontalTextAlignment="Center"/>
+                                            <StackLayout Orientation="Horizontal" Margin="30, 0, 0, 0">
+                                                <Label Text="{Binding Location.Name}"
+                                                    FontSize="13"
+                                                    TextColor="{StaticResource Secondary}"
+                                                    HorizontalTextAlignment="Center"/>
+                                                <Label Text=", "
+                                                    FontSize="13"
+                                                    TextColor="{StaticResource Secondary}"
+                                                    HorizontalTextAlignment="Center"/>
+                                                <Label Text="{Binding Location.Country}"
+                                                    FontSize="13"
+                                                    TextColor="{StaticResource Secondary}"
+                                                    HorizontalTextAlignment="Center"/>
+                                            </StackLayout>
+                                        </VerticalStackLayout>
+                                        <Image WidthRequest="120"
+                                                HeightRequest="120"
+                                                Grid.Column="1"
+                                                Source="{Binding Current.Condition.Icon, StringFormat='https:{0}'}"/>
+                                    </Grid>
+                                </Frame>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>
