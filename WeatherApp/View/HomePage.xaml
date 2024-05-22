@@ -13,15 +13,16 @@
     </ContentPage.Behaviors>
 
     <StackLayout>
-        <HorizontalStackLayout Margin="20, 20, 0, 0">
+        <FlexLayout Margin="20, 20, 20, 0" JustifyContent="SpaceBetween">
+            <Button Padding="0" BackgroundColor="Transparent" Command="{Binding ToggleCelsiusFerenheit}"  Text="{Binding ButtonText}" FontSize="32"/>
             <ImageButton Source="menu.png" HeightRequest="50" WidthRequest="30" Command="{Binding ToggleFavoritesCommand}"/>
-        </HorizontalStackLayout>
+        </FlexLayout>
 
         <VerticalStackLayout HorizontalOptions="Center" Margin="0, 10, 0, 0">
             <Frame Padding="0" CornerRadius="200" HeightRequest="250" WidthRequest="250">
                 <Image HeightRequest="200" WidthRequest="200" Source="{Binding CurrentWeather.Condition.Icon, StringFormat='https:{0}'}"/>
             </Frame>
-            <Label Text="{Binding CurrentWeather.TempC, StringFormat='{0:F1}°'}" 
+            <Label Text="{Binding CurrentTemp, StringFormat='{0:F1}°'}" 
                    HorizontalOptions="Center"
                    Margin="0, 10, 0, 0"
                    FontSize="60"

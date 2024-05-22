@@ -28,7 +28,13 @@ public partial class HomeViewModel : BaseViewModel
     ObservableCollection<Forecastday> weatherForecastDays;
     [ObservableProperty]
     Color backgroundColor;
+    [ObservableProperty]
+    double currentTemp;
+    [ObservableProperty]
+    string buttonText = "°C";
 
+    private bool isCelsius = true;
+    public RelayCommand ToggleCelsiusFerenheit { get; set; }
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
     {
@@ -38,12 +44,29 @@ public partial class HomeViewModel : BaseViewModel
         _locationService = locationService;
         _weatherService = weatherService;
         _alertService = alertService;
+        ToggleCelsiusFerenheit = new RelayCommand(ToggleTemperatureUnit);
     }
     [RelayCommand]
     private async Task ToggleFavorites()
     {
         // Toggle between displaying the Home page and the Favorites page
         await Shell.Current.GoToAsync("//FavouritesPage");
+    }
+
+    private void ToggleTemperatureUnit()
+    {
+        isCelsius = !isCelsius;
+
+        if (isCelsius)
+        {
+            CurrentTemp = (double)CurrentWeather.TempC;
+            ButtonText = "°C";
+        }
+        else
+        {
+            CurrentTemp = (double)CurrentWeather.TempF;
+            ButtonText = "°F";
+        }
     }
 
     // Overrides OnAppearing event so the API is not called until query params are read
@@ -73,7 +96,7 @@ public partial class HomeViewModel : BaseViewModel
 
             // Gets all weather data for location
             var forecastWeather = await _weatherService.GetAllWeatherData(LocationName != null ? LocationName : coordinates);
-            setWeatherData(forecastWeather);
+            SetWeatherData(forecastWeather);
         }
         catch (Exception e)
         {
@@ -85,20 +108,20 @@ public partial class HomeViewModel : BaseViewModel
         }
     }
 
-    void setWeatherData(ForecastJsonResponse forecastWeather)
+    void SetWeatherData(ForecastJsonResponse forecastWeather)
     {
         // Sets current loaction and weather data
         CurrentLocation = forecastWeather.Location;
         CurrentLocation.Localtime = CurrentLocation.Localtime.Substring(11);
         CurrentWeather = forecastWeather.Current;
-        BackgroundColor = Color.FromRgb(0, 0, 0);  
+        CurrentTemp = (double)CurrentWeather.TempC;
+        BackgroundColor = Color.FromArgb("#F59E42");
 
         if(CurrentWeather.TempC < 15)
         {
-            BackgroundColor = Color.FromRgb(255, 255, 255);
+            BackgroundColor = Color.FromArgb("#F59E42");
         }
 
-        if (LocationName == null) LocationName = CurrentLocation.Name;
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
