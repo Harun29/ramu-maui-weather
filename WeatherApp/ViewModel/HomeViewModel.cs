@@ -25,7 +25,9 @@ public partial class HomeViewModel : BaseViewModel
     [ObservableProperty]
     ObservableCollection<Hour> weatherForecastHours;
     [ObservableProperty]
-    ObservableCollection<Forecastday> weatherForecastDays; 
+    ObservableCollection<Forecastday> weatherForecastDays;
+    [ObservableProperty]
+    Color backgroundColor;
 
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
@@ -89,6 +91,12 @@ public partial class HomeViewModel : BaseViewModel
         CurrentLocation = forecastWeather.Location;
         CurrentLocation.Localtime = CurrentLocation.Localtime.Substring(11);
         CurrentWeather = forecastWeather.Current;
+        BackgroundColor = Color.FromRgb(0, 0, 0);  
+
+        if(CurrentWeather.TempC < 15)
+        {
+            BackgroundColor = Color.FromRgb(255, 255, 255);
+        }
 
         if (LocationName == null) LocationName = CurrentLocation.Name;
 
@@ -99,6 +107,7 @@ public partial class HomeViewModel : BaseViewModel
         var forecastDays = new ObservableCollection<Forecastday>(forecastWeather.Forecast.Forecastday);
         SetDaysNames(forecastDays);
         WeatherForecastDays = forecastDays;
+
     }
     static void SetDaysNames(ObservableCollection<Forecastday> forecastDays)
     {

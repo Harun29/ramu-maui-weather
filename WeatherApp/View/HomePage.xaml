@@ -5,7 +5,7 @@
              xmlns:model="clr-namespace:WeatherAPI.Standard.Models;assembly=WeatherAPI.Standard"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewmodel:HomeViewModel"
-             BackgroundColor="{StaticResource Primary}"
+             BackgroundColor="{Binding BackgroundColor}"
              Title="Home">
 
     <ContentPage.Behaviors>
