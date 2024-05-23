@@ -32,8 +32,10 @@ public partial class HomeViewModel : BaseViewModel
     double currentTemp;
     [ObservableProperty]
     string buttonText = "°C";
-
-    private bool isCelsius = true;
+    [ObservableProperty]
+    bool isCelsius = true;
+    [ObservableProperty]
+    bool isFerenheit = false;
     public RelayCommand ToggleCelsiusFerenheit { get; set; }
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
@@ -55,9 +57,10 @@ public partial class HomeViewModel : BaseViewModel
 
     private void ToggleTemperatureUnit()
     {
-        isCelsius = !isCelsius;
+        IsCelsius = !IsCelsius;
+        IsFerenheit = !IsFerenheit;
 
-        if (isCelsius)
+        if (IsCelsius)
         {
             CurrentTemp = (double)CurrentWeather.TempC;
             ButtonText = "°C";
@@ -68,6 +71,7 @@ public partial class HomeViewModel : BaseViewModel
             ButtonText = "°F";
         }
     }
+
 
     // Overrides OnAppearing event so the API is not called until query params are read
     [RelayCommand]
@@ -156,7 +160,6 @@ public partial class HomeViewModel : BaseViewModel
         // Modify Time so it shows correct format
         foreach (var hour in forecastNext48Hours)
             hour.Time = hour.Time.Substring(11);
-
         // Sets weather data 24 hours from now
         var output = new ObservableCollection<Hour>(forecastNext48Hours.GetRange(nextHourIndex, 24));
 

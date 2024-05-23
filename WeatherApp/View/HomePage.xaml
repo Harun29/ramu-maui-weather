@@ -78,7 +78,14 @@
                                                    FontSize="18"
                                                    Margin="0, 10, 0, 0"
                                                    FontFamily="Calibri" FontAttributes="Bold"
-                                                   HorizontalTextAlignment="Center"/>
+                                                   HorizontalTextAlignment="Center"
+                                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsCelsius}"/>
+                                            <Label Text="{Binding TempF, StringFormat='{0:F1} °F'}"
+                                                   FontSize="18"
+                                                   Margin="0, 10, 0, 0"
+                                                   FontFamily="Calibri" FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsFerenheit}"/>
                                         </VerticalStackLayout>
                                     </Frame>
                                 </FlexLayout>
