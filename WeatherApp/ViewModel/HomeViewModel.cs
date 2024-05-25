@@ -27,8 +27,6 @@ public partial class HomeViewModel : BaseViewModel
     [ObservableProperty]
     ObservableCollection<Forecastday> weatherForecastDays;
     [ObservableProperty]
-    Color backgroundColor;
-    [ObservableProperty]
     double currentTemp;
     [ObservableProperty]
     string buttonText = "°C";
@@ -36,6 +34,8 @@ public partial class HomeViewModel : BaseViewModel
     bool isCelsius = true;
     [ObservableProperty]
     bool isFerenheit = false;
+    [ObservableProperty]
+    string backgroundUrl;
     public RelayCommand ToggleCelsiusFerenheit { get; set; }
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
@@ -49,6 +49,7 @@ public partial class HomeViewModel : BaseViewModel
         ToggleCelsiusFerenheit = new RelayCommand(ToggleTemperatureUnit);
     }
     [RelayCommand]
+
     private async Task ToggleFavorites()
     {
         // Toggle between displaying the Home page and the Favorites page
@@ -119,13 +120,43 @@ public partial class HomeViewModel : BaseViewModel
         CurrentLocation.Localtime = CurrentLocation.Localtime.Substring(11);
         CurrentWeather = forecastWeather.Current;
         CurrentTemp = (double)CurrentWeather.TempC;
-        BackgroundColor = Color.FromArgb("#F59E42");
-
-        if(CurrentWeather.TempC < 15)
+        switch (CurrentWeather.Condition.Text)
         {
-            BackgroundColor = Color.FromArgb("#F59E42");
+            case "Sunny":
+                BackgroundUrl = "sunny.png";
+                break;
+            case "Clear":
+                BackgroundUrl = "night.png";
+                break;
         }
 
+        if (CurrentWeather.Condition.Text.ToLower().Contains("rain"))
+        {
+            BackgroundUrl = "rain.png";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("snow"))
+        {
+            BackgroundUrl = "snow.png";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("thunder"))
+        {
+            BackgroundUrl = "thunder.png";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("cloud") || CurrentWeather.Condition.Text.ToLower().Contains("overcast"))
+        {
+            BackgroundUrl = "cloud.png";
+        }
+        else
+        {
+            if (CurrentWeather.IsDay == 1)
+            {
+                BackgroundUrl = "sunny.png";
+            }
+            else
+            {
+                BackgroundUrl = "night.png";
+            }
+        }
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
