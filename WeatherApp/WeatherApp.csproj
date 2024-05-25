@@ -48,9 +48,14 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 		<MauiFont Remove="Resources\Images\arrow.png" />
+		<MauiFont Remove="Resources\Images\cloud.jpg" />
 		<MauiFont Remove="Resources\Images\delete.png" />
 		<MauiFont Remove="Resources\Images\menu.png" />
+		<MauiFont Remove="Resources\Images\night.png" />
+		<MauiFont Remove="Resources\Images\rainy.gif" />
+		<MauiFont Remove="Resources\Images\snow.jpg" />
 		<MauiFont Remove="Resources\Images\sunny.png" />
+		<MauiFont Remove="Resources\Images\thunder.jpg" />
 		<MauiSplashScreen Include="Resources\Splash\splash_icon.svg" />
 	</ItemGroup>
 
@@ -106,12 +111,17 @@
 	<ItemGroup>
 	  <MauiImage Include="Resources\Images\about.png" />
 	  <MauiImage Include="Resources\Images\arrow.png" />
-	  <MauiImage Include="Resources\Images\delete.png" />
+	  <MauiImage Include="Resources\Images\cloud.jpg" />
+	  <MauiIcon Include="Resources\Images\delete.png" />
 	  <MauiImage Include="Resources\Images\favourite.png" />
 	  <MauiImage Include="Resources\Images\home.png" />
 	  <MauiImage Include="Resources\Images\humidity.svg" />
 	  <MauiImage Include="Resources\Images\menu.png" />
+	  <MauiImage Include="Resources\Images\night.png" />
+	  <MauiImage Include="Resources\Images\rainy.gif" />
+	  <MauiImage Include="Resources\Images\snow.jpg" />
 	  <MauiImage Include="Resources\Images\sunny.png" />
+	  <MauiImage Include="Resources\Images\thunder.jpg" />
 	  <MauiImage Include="Resources\Images\wind.svg" />
 	  <MauiImage Include="Resources\Images\barometer.svg" />
 	  <MauiImage Include="Resources\Images\sunrise.svg" />
