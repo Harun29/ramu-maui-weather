@@ -42,6 +42,10 @@ public partial class HomeViewModel : BaseViewModel
     Color secondaryColor;
     [ObservableProperty]
     Color transparentBackground;
+    [ObservableProperty]
+    bool isHourly = true;
+    [ObservableProperty]
+    bool isDaily = true;
 
     private Dictionary<string, Color> stylesColors  =new ()
         {
@@ -50,6 +54,8 @@ public partial class HomeViewModel : BaseViewModel
             { "secondary", Color.FromArgb("#FBC267") }
         };
     public RelayCommand ToggleCelsiusFerenheit { get; set; }
+    public RelayCommand ToggleCollectionHourly { get; set; }
+    public RelayCommand ToggleCollectionDaily { get; set; }
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
     {
@@ -60,6 +66,8 @@ public partial class HomeViewModel : BaseViewModel
         _weatherService = weatherService;
         _alertService = alertService;
         ToggleCelsiusFerenheit = new RelayCommand(ToggleTemperatureUnit);
+        ToggleCollectionHourly = new RelayCommand(ToggleHourly);
+        ToggleCollectionDaily = new RelayCommand(ToggleDaily);
     }
     [RelayCommand]
 
@@ -84,6 +92,23 @@ public partial class HomeViewModel : BaseViewModel
             CurrentTemp = (double)CurrentWeather.TempF;
             ButtonText = "°F";
         }
+    }
+    private void ToggleHourly()
+    {
+        IsHourly = true;
+        IsDaily = false;
+
+        OnPropertyChanged(nameof(IsHourly));
+        OnPropertyChanged(nameof(IsDaily));
+
+    }
+    private void ToggleDaily()
+    {
+        IsHourly = false;
+        IsDaily = true;
+
+        OnPropertyChanged(nameof(IsHourly));
+        OnPropertyChanged(nameof(IsDaily));
     }
 
 
