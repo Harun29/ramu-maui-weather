@@ -25,8 +25,31 @@ public partial class HomeViewModel : BaseViewModel
     [ObservableProperty]
     ObservableCollection<Hour> weatherForecastHours;
     [ObservableProperty]
-    ObservableCollection<Forecastday> weatherForecastDays; 
+    ObservableCollection<Forecastday> weatherForecastDays;
+    [ObservableProperty]
+    double currentTemp;
+    [ObservableProperty]
+    string buttonText = "°C";
+    [ObservableProperty]
+    bool isCelsius = true;
+    [ObservableProperty]
+    bool isFerenheit = false;
+    [ObservableProperty]
+    string backgroundUrl;
+    [ObservableProperty]
+    Color primaryColor;
+    [ObservableProperty]
+    Color secondaryColor;
+    [ObservableProperty]
+    Color transparentBackground;
 
+    private Dictionary<string, Color> stylesColors  =new ()
+        {
+            { "transparentBackground", Color.FromArgb("#50FAB442") },
+            { "primary", Color.FromArgb("#FAB442") },
+            { "secondary", Color.FromArgb("#FBC267") }
+        };
+    public RelayCommand ToggleCelsiusFerenheit { get; set; }
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
     {
@@ -36,13 +59,33 @@ public partial class HomeViewModel : BaseViewModel
         _locationService = locationService;
         _weatherService = weatherService;
         _alertService = alertService;
+        ToggleCelsiusFerenheit = new RelayCommand(ToggleTemperatureUnit);
     }
     [RelayCommand]
+
     private async Task ToggleFavorites()
     {
         // Toggle between displaying the Home page and the Favorites page
         await Shell.Current.GoToAsync("//FavouritesPage");
     }
+
+    private void ToggleTemperatureUnit()
+    {
+        IsCelsius = !IsCelsius;
+        IsFerenheit = !IsFerenheit;
+
+        if (IsCelsius)
+        {
+            CurrentTemp = (double)CurrentWeather.TempC;
+            ButtonText = "°C";
+        }
+        else
+        {
+            CurrentTemp = (double)CurrentWeather.TempF;
+            ButtonText = "°F";
+        }
+    }
+
 
     // Overrides OnAppearing event so the API is not called until query params are read
     [RelayCommand]
@@ -71,7 +114,7 @@ public partial class HomeViewModel : BaseViewModel
 
             // Gets all weather data for location
             var forecastWeather = await _weatherService.GetAllWeatherData(LocationName != null ? LocationName : coordinates);
-            setWeatherData(forecastWeather);
+            SetWeatherData(forecastWeather);
         }
         catch (Exception e)
         {
@@ -83,14 +126,79 @@ public partial class HomeViewModel : BaseViewModel
         }
     }
 
-    void setWeatherData(ForecastJsonResponse forecastWeather)
+    void SetWeatherData(ForecastJsonResponse forecastWeather)
     {
         // Sets current loaction and weather data
         CurrentLocation = forecastWeather.Location;
         CurrentLocation.Localtime = CurrentLocation.Localtime.Substring(11);
         CurrentWeather = forecastWeather.Current;
+        CurrentTemp = (double)CurrentWeather.TempC;
 
-        if (LocationName == null) LocationName = CurrentLocation.Name;
+        switch (CurrentWeather.Condition.Text)
+        {
+            case "Sunny":
+                BackgroundUrl = "sunny.png";
+                stylesColors["primary"] = Color.FromArgb("#FAB442");
+                stylesColors["secondary"] = Color.FromArgb("#FBC267");
+                stylesColors["transparentBackground"] = Color.FromArgb("#50FAB442");
+                break;
+            case "Clear":
+                stylesColors["primary"] = Color.FromArgb("#5a5bbd");
+                stylesColors["secondary"] = Color.FromArgb("#797AC9");
+                stylesColors["transparentBackground"] = Color.FromArgb("#505a5bbd");
+                BackgroundUrl = "night.png";
+                break;
+        }
+
+        if (CurrentWeather.Condition.Text.ToLower().Contains("rain"))
+        {
+            stylesColors["primary"] = Color.FromArgb("#60728d");
+            stylesColors["secondary"] = Color.FromArgb("#7B8CA5");
+            stylesColors["transparentBackground"] = Color.FromArgb("#5060728d");
+            BackgroundUrl = "rainy.gif";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("snow"))
+        {
+            stylesColors["primary"] = Color.FromArgb("#4577b6");
+            stylesColors["secondary"] = Color.FromArgb("#658EC4");
+            stylesColors["transparentBackground"] = Color.FromArgb("#504577b6");
+            BackgroundUrl = "snow.jpg";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("thunder"))
+        {
+            stylesColors["primary"] = Color.FromArgb("#644950");
+            stylesColors["secondary"] = Color.FromArgb("#88636D");
+            stylesColors["transparentBackground"] = Color.FromArgb("#50644950");
+            BackgroundUrl = "thunder.jpg";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("cloud") || CurrentWeather.Condition.Text.ToLower().Contains("overcast"))
+        {
+            stylesColors["primary"] = Color.FromArgb("#949399");
+            stylesColors["secondary"] = Color.FromArgb("#A8A7AC");
+            stylesColors["transparentBackground"] = Color.FromArgb("#50949399");
+            BackgroundUrl = "cloud.png";
+        }
+        else
+        {
+            if (CurrentWeather.IsDay == 1)
+            {
+                stylesColors["primary"] = Color.FromArgb("#FAB442");
+                stylesColors["secondary"] = Color.FromArgb("#FBC267");
+                stylesColors["transparentBackground"] = Color.FromArgb("#50FAB442");
+                BackgroundUrl = "sunny.png";
+            }
+            else
+            {
+                stylesColors["primary"] = Color.FromArgb("#5a5bbd");
+                stylesColors["secondary"] = Color.FromArgb("#797AC9");
+                stylesColors["transparentBackground"] = Color.FromArgb("#505a5bbd");
+                BackgroundUrl = "night.png";
+            }
+        }
+
+        PrimaryColor = stylesColors["primary"];
+        SecondaryColor = stylesColors["secondary"];
+        TransparentBackground = stylesColors["transparentBackground"];
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
@@ -99,6 +207,7 @@ public partial class HomeViewModel : BaseViewModel
         var forecastDays = new ObservableCollection<Forecastday>(forecastWeather.Forecast.Forecastday);
         SetDaysNames(forecastDays);
         WeatherForecastDays = forecastDays;
+
     }
     static void SetDaysNames(ObservableCollection<Forecastday> forecastDays)
     {
@@ -124,7 +233,6 @@ public partial class HomeViewModel : BaseViewModel
         // Modify Time so it shows correct format
         foreach (var hour in forecastNext48Hours)
             hour.Time = hour.Time.Substring(11);
-
         // Sets weather data 24 hours from now
         var output = new ObservableCollection<Hour>(forecastNext48Hours.GetRange(nextHourIndex, 24));
 

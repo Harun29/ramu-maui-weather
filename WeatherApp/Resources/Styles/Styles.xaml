@@ -6,7 +6,7 @@
 
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
         <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
-        <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />
+        <!--<Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />-->
         <Setter Property="Shell.NavBarIsVisible" Value="False" />
         <Setter Property="Shell.NavBarHasShadow" Value="False" />
         <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
