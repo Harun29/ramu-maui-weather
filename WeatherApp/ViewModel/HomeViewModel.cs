@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WeatherAPI.Standard.Models;
@@ -56,6 +57,8 @@ public partial class HomeViewModel : BaseViewModel
     public RelayCommand ToggleCelsiusFerenheit { get; set; }
     public RelayCommand ToggleCollectionHourly { get; set; }
     public RelayCommand ToggleCollectionDaily { get; set; }
+    public RelayCommand OpenWeatherApiCommand { get; }
+
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
     {
@@ -68,9 +71,16 @@ public partial class HomeViewModel : BaseViewModel
         ToggleCelsiusFerenheit = new RelayCommand(ToggleTemperatureUnit);
         ToggleCollectionHourly = new RelayCommand(ToggleHourly);
         ToggleCollectionDaily = new RelayCommand(ToggleDaily);
+        OpenWeatherApiCommand = new RelayCommand(OpenWeatherApi);
     }
-    [RelayCommand]
 
+    private async void OpenWeatherApi()
+    {
+        var uri = new Uri("https://weatherapi.com");
+        await Launcher.Default.OpenAsync(uri);
+    }
+
+    [RelayCommand]
     private async Task ToggleFavorites()
     {
         // Toggle between displaying the Home page and the Favorites page

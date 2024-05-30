@@ -33,7 +33,7 @@
                 <Label Text="{Binding CurrentLocation.Localtime}" FontSize="21" FontAttributes="Bold"></Label>
             </StackLayout>
 
-            <FlexLayout Margin="20, 0, 20, 180" JustifyContent="SpaceBetween">
+            <FlexLayout Margin="20, 0, 20, 150" JustifyContent="SpaceBetween">
                 <VerticalStackLayout>
                     <HorizontalStackLayout>
                         <Label Text="{Binding CurrentTemp, StringFormat='{0:F1}°'}" 
@@ -51,6 +51,10 @@
                         <Label Text="Low: "></Label>
                         <Label IsVisible="{Binding IsCelsius}" Text="{Binding WeatherForecastDays[0].Day.MintempC, StringFormat='{0:F1}°'}"/>
                         <Label IsVisible="{Binding IsFerenheit}" Text="{Binding WeatherForecastDays[0].Day.MintempF, StringFormat='{0:F1}°'}"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="UV index: "></Label>
+                        <Label Text="{Binding CurrentWeather.Uv}"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
                 <VerticalStackLayout VerticalOptions="Center">
@@ -161,9 +165,9 @@
                 </Frame>
             </AbsoluteLayout>
 
-            <Label Margin="20, 0, 0, 0" FontSize="21" FontAttributes="Bold" Text="Additional info"></Label>
+            <Label Margin="20, 0, 0, 0" FontSize="21" FontAttributes="Bold" Text="Conditions"></Label>
 
-            <Grid HorizontalOptions="Center" RowSpacing="10" ColumnSpacing="10" Margin="0, 0, 0, 170">
+            <Grid HorizontalOptions="Center" RowSpacing="10" ColumnSpacing="10" Margin="0, 0, 0, 120">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="130"/>
                     <RowDefinition Height="130"/>
@@ -186,7 +190,7 @@
                                     <Label Padding="0, 7, 0, 0" Text="km/h"></Label>
                                 </FlexLayout>
                                 <FlexLayout>
-                                    <Label Text="Direction: "></Label>
+                                    <Label Text="Dir: "></Label>
                                     <Label Text="{Binding CurrentWeather.WindDir}"></Label>
                                 </FlexLayout>
                             </StackLayout>
@@ -239,6 +243,26 @@
                     </StackLayout>
                 </Frame>
             </Grid>
+
+            <FlexLayout Background="{Binding SecondaryColor}" HeightRequest="50" JustifyContent="Center" AlignItems="Center">
+                <Label
+		            Text="Povered by:    "
+		            SemanticProperties.HeadingLevel="Level1"
+		            FontSize="Default"
+		            HorizontalOptions="Center" />
+
+                <Label
+		            Text="weatherapi.com"
+		            TextDecorations="Underline"
+		            TextColor="Blue"
+		            SemanticProperties.HeadingLevel="Level1"
+		            FontSize="Default"
+		            HorizontalOptions="Center" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenWeatherApiCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </FlexLayout>
 
         </StackLayout>
     </ScrollView>

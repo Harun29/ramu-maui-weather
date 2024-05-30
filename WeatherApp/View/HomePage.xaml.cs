@@ -1,10 +1,11 @@
-﻿using WeatherApp.ViewModel;
+﻿using System.Windows.Input;
+using WeatherApp.ViewModel;
 
 namespace WeatherApp.View;
 
 public partial class HomePage : ContentPage
 {
-	public HomePage(HomeViewModel viewModel)
+    public HomePage(HomeViewModel viewModel)
 	{
 		InitializeComponent();
 		BindingContext = viewModel;
