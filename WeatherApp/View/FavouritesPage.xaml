@@ -5,7 +5,7 @@
              xmlns:viewmodel="clr-namespace:WeatherApp.ViewModel"
              xmlns:models="clr-namespace:WeatherAPI.Standard.Models;assembly=WeatherAPI.Standard"
              x:DataType="viewmodel:FavouritesViewModel"
-             BackgroundColor="#F59E42"
+             BackgroundColor="{Binding SecondaryColor}"
              Title="Favourites">
     <ScrollView>
         <Grid>
@@ -36,28 +36,29 @@
                         Margin="0, 8, 0, 0"/>
                 </HorizontalStackLayout>
                 <Frame  CornerRadius="10"
-                        BackgroundColor="#BC670E"
+                        BackgroundColor="{Binding PrimaryColor}"
                         Padding="0"
                         Margin="10"
                         WidthRequest="360">
                     <SearchBar x:Name="searchBar"
                        TextChanged="OnTextChanged"
                         Placeholder="Search locations..."
-                        Background="{StaticResource Primary}"
-                        />
+                        Background="{Binding PrimaryColor}"
+                        Margin="0, 0, 0, -2"/>
                     
                 </Frame>
                 <CollectionView ItemsLayout="VerticalList"
                                 ItemsSource="{Binding SearchResults}"
                                 VerticalScrollBarVisibility="Never"
-                                HorizontalScrollBarVisibility="Never">
+                                HorizontalScrollBarVisibility="Never"
+                                >
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:CurrentJsonResponse">
-                            <Frame Background="#BC670E"
-                                   BorderColor="#BC670E"
-                                   CornerRadius="5"
-                                   Padding="5"
+                            <Frame Background="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=PrimaryColor}"
+                                   CornerRadius="20"
+                                   Padding="10"
                                    Margin="10, 5"
+                                   WidthRequest="360"
                                    >    
                                 <FlexLayout AlignContent="Center"
                                             JustifyContent="SpaceBetween"
@@ -74,7 +75,7 @@
                                     </VerticalStackLayout>
                                     <Button Text="Save City"
                                             TextColor="White"
-                                            BackgroundColor="{StaticResource Primary}"
+                                            BackgroundColor="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=SecondaryColor}"
                                             FontSize="14"
                                             FontFamily="PoppinsMedium"
                                             HorizontalOptions="Center"
@@ -110,12 +111,12 @@
                                                     CommandParameter="{Binding Location.Name}" />
                                     </SwipeItems>
                                 </SwipeView.RightItems>
-                                <Frame Background="#BC670E"
-                                    BorderColor="#BC670E"
-                                    HeightRequest="140"
+                                <Frame Background="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=PrimaryColor}"
+                                    HeightRequest="145"
                                     Margin="10, 10"
                                     CornerRadius="20"
-                                    WidthRequest="360">
+                                    WidthRequest="360"
+                                    Padding="5">
 
                                     <Grid ColumnDefinitions="3*, 3*">
                                         <VerticalStackLayout Grid.Column="0">
@@ -124,32 +125,32 @@
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:FavouritesViewModel}}, Path=GoToCityDataCommand}"
                                                     CommandParameter="{Binding Location.Name}"/>
                                             </VerticalStackLayout.GestureRecognizers>
-                                            <Label Text="{Binding Current.TempC, StringFormat='{0:F1}°'}"
-                                                FontSize="40"
-                                                FontFamily="Imprima"
-                                                HorizontalTextAlignment="Center"/>
-                                            <Label Text="{Binding Current.FeelslikeC, StringFormat='Feels like {0:F1} °C'}"
-                                                FontSize="13"
-                                                TextColor="{StaticResource Secondary}"
-                                                HorizontalTextAlignment="Center"/>
-                                            <StackLayout Orientation="Horizontal" Margin="28, 0, 0, 0">
+                                            <StackLayout Orientation="Horizontal" Margin="15, 10, 0, 0">
                                                 <Label Text="{Binding Location.Name}"
-                                                    FontSize="15"
-                                                    TextColor="{StaticResource Secondary}"
-                                                    HorizontalTextAlignment="Center"/>
+                                                       FontSize="17"
+                                                       TextColor="{StaticResource Secondary}"
+                                                       HorizontalTextAlignment="Center"/>
                                                 <Label Text=", "
-                                                    FontSize="13"
-                                                    TextColor="{StaticResource Secondary}"
-                                                    HorizontalTextAlignment="Center"/>
+                                                       FontSize="17"
+                                                       TextColor="{StaticResource Secondary}"
+                                                       HorizontalTextAlignment="Center"/>
                                                 <Label Text="{Binding Location.Country}"
-                                                    FontSize="15"
-                                                    TextColor="{StaticResource Secondary}"
-                                                    HorizontalTextAlignment="Center"/>
+                                                       FontSize="17"
+                                                       TextColor="{StaticResource Secondary}"
+                                                       HorizontalTextAlignment="Center"/>
                                             </StackLayout>
+                                            <Label Text="{Binding Current.TempC, StringFormat='{0:F1}°'}"
+                                                FontSize="50"
+                                                FontFamily="Imprima"
+                                                Margin="20, 0, 0, 0"/>
+                                            <Label Text="{Binding Current.FeelslikeC, StringFormat='Feels like {0:F1} °C'}"
+                                                FontSize="14"
+                                                TextColor="{StaticResource Secondary}"
+                                                Margin="15, 0, 0, 0"/>
                                         </VerticalStackLayout>
-                                        <Image WidthRequest="120"
-                                               Margin="30, 0, 0, 0"
-                                                HeightRequest="120"
+                                        <Image  WidthRequest="100"
+                                                Margin="20, 5, 0, 0"
+                                                HeightRequest="100"
                                                 Grid.Column="1"
                                                 Source="{Binding Current.Condition.Icon, StringFormat='https:{0}'}"/>
                                     </Grid>
