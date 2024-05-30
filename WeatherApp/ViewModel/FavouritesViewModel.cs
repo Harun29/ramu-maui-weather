@@ -9,6 +9,8 @@ namespace WeatherApp.ViewModel;
 
 public partial class FavouritesViewModel : BaseViewModel
 {
+    public static FavouritesViewModel Instance { get; set; }
+
     ILocationService _locationService;
     IWeatherService _weatherService;
     IAlertService _alertService;
@@ -22,18 +24,12 @@ public partial class FavouritesViewModel : BaseViewModel
     ObservableCollection<CurrentJsonResponse> favouriteLocations;
     [ObservableProperty]
     ObservableCollection<CurrentJsonResponse> searchResults;
-
-    private Dictionary<string, Color> stylesColors = new()
-        {
-            { "transparentBackground", Color.FromArgb("#50FAB442") },
-            { "primary", Color.FromArgb("#FAB442") },
-            { "secondary", Color.FromArgb("#FBC267") }
-        };
     public FavouritesViewModel(ILocationService locationService, IWeatherService weatherService,
         IAlertService alertService, IStorageService storageService)
     {
         Title = "RAMU Weather";
 
+        Instance = this;
         _locationService = locationService;
         _weatherService = weatherService;
         _alertService = alertService;
@@ -42,6 +38,8 @@ public partial class FavouritesViewModel : BaseViewModel
         SearchResults = new ObservableCollection<CurrentJsonResponse>();
         FavouriteLocations = new ObservableCollection<CurrentJsonResponse>();
         MainThread.InvokeOnMainThreadAsync(PopulateFavouritesList);
+        PrimaryColor = HomeViewModel.Instance.PrimaryColor;
+        SecondaryColor = HomeViewModel.Instance.SecondaryColor;
     }
 
     async Task LoadCurrentLocationData()
@@ -150,62 +148,7 @@ public partial class FavouritesViewModel : BaseViewModel
         if (q == null) return;
 
         await Shell.Current.GoToAsync($"//{nameof(HomePage)}?location={q}", true);
-        switch (data.Current.Condition.Text)
-        {
-            case "Sunny":
-                stylesColors["primary"] = Color.FromArgb("#FAB442");
-                stylesColors["secondary"] = Color.FromArgb("#FBC267");
-                stylesColors["transparentBackground"] = Color.FromArgb("#50FAB442");
-                break;
-            case "Clear":
-                stylesColors["primary"] = Color.FromArgb("#5a5bbd");
-                stylesColors["secondary"] = Color.FromArgb("#797AC9");
-                stylesColors["transparentBackground"] = Color.FromArgb("#505a5bbd");
-                break;
-        }
-
-        if (data.Current.Condition.Text.ToLower().Contains("rain"))
-        {
-            stylesColors["primary"] = Color.FromArgb("#60728d");
-            stylesColors["secondary"] = Color.FromArgb("#7B8CA5");
-            stylesColors["transparentBackground"] = Color.FromArgb("#5060728d");
-        }
-        else if (data.Current.Condition.Text.ToLower().Contains("snow"))
-        {
-            stylesColors["primary"] = Color.FromArgb("#4577b6");
-            stylesColors["secondary"] = Color.FromArgb("#658EC4");
-            stylesColors["transparentBackground"] = Color.FromArgb("#504577b6");
-        }
-        else if (data.Current.Condition.Text.ToLower().Contains("thunder"))
-        {
-            stylesColors["primary"] = Color.FromArgb("#644950");
-            stylesColors["secondary"] = Color.FromArgb("#88636D");
-            stylesColors["transparentBackground"] = Color.FromArgb("#50644950");
-        }
-        else if (data.Current.Condition.Text.ToLower().Contains("cloud") || data.Current.Condition.Text.ToLower().Contains("overcast"))
-        {
-            stylesColors["primary"] = Color.FromArgb("#949399");
-            stylesColors["secondary"] = Color.FromArgb("#A8A7AC");
-            stylesColors["transparentBackground"] = Color.FromArgb("#50949399");
-        }
-        else
-        {
-            if (data.Current.IsDay == 1)
-            {
-                stylesColors["primary"] = Color.FromArgb("#FAB442");
-                stylesColors["secondary"] = Color.FromArgb("#FBC267");
-                stylesColors["transparentBackground"] = Color.FromArgb("#50FAB442");
-            }
-            else
-            {
-                stylesColors["primary"] = Color.FromArgb("#5a5bbd");
-                stylesColors["secondary"] = Color.FromArgb("#797AC9");
-                stylesColors["transparentBackground"] = Color.FromArgb("#505a5bbd");
-            }
-        }
-
-        PrimaryColor = stylesColors["primary"];
-        SecondaryColor = stylesColors["secondary"];
+        
     }
 
     [RelayCommand]

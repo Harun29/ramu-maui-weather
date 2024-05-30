@@ -12,151 +12,260 @@
         <toolkit:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
     </ContentPage.Behaviors>
 
-    <StackLayout>
-        <FlexLayout Margin="20, 20, 20, 20" JustifyContent="SpaceBetween">
-            <Button Padding="0" BackgroundColor="Transparent" Command="{Binding ToggleCelsiusFerenheit}"  Text="{Binding ButtonText}" FontSize="32"/>
-            <Label Text="{Binding CurrentLocation.Name}" 
-                   TextColor="White" 
-                   HorizontalTextAlignment="Center"
-                   VerticalOptions="Center"
-                   FontFamily="Impact"
-                   FontAttributes="Bold"
-                   FontSize="30"
-                   Padding="0"
-                   Margin="0, 0, 0, 0"/>
-            <ImageButton HorizontalOptions="Center" Source="menu.png" HeightRequest="50" WidthRequest="30" Command="{Binding ToggleFavoritesCommand}"/>
-        </FlexLayout>
+    <ScrollView>
+        <StackLayout>
+            <FlexLayout Margin="20, 20, 20, 20" JustifyContent="SpaceBetween">
+                <Button Padding="0" BackgroundColor="Transparent" Command="{Binding ToggleCelsiusFerenheit}"  Text="{Binding ButtonText}" FontSize="32"/>
+                <Label Text="{Binding CurrentLocation.Name}" 
+                       TextColor="White" 
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       FontFamily="Impact"
+                       FontAttributes="Bold"
+                       FontSize="30"
+                       Padding="0"
+                       Margin="0, 0, 0, 0"/>
+                <ImageButton HorizontalOptions="Center" Source="menu.png" HeightRequest="50" WidthRequest="30" Command="{Binding ToggleFavoritesCommand}"/>
+            </FlexLayout>
 
-        <Label Margin="20, 0, 0, 0" Text="Now" FontSize="21" FontAttributes="Bold"></Label>
+            <StackLayout Margin="20, 0, 0, 0" Orientation="Horizontal">
+                <Label Text="Now / Local time: " FontSize="21" FontAttributes="Bold"></Label>
+                <Label Text="{Binding CurrentLocation.Localtime}" FontSize="21" FontAttributes="Bold"></Label>
+            </StackLayout>
 
-        <FlexLayout Margin="20, 0, 20, 180" JustifyContent="SpaceBetween">
-            <VerticalStackLayout>
-                <HorizontalStackLayout>
-                    <Label Text="{Binding CurrentTemp, StringFormat='{0:F1}°'}" 
-                        TextColor="White"
-                        FontSize="40"
-                        FontFamily="Impact"
-                        FontAttributes="Bold" VerticalOptions="Center"/>
-                    <Image HeightRequest="100" WidthRequest="100" Source="{Binding CurrentWeather.Condition.Icon, StringFormat='https:{0}'}"/>
-                </HorizontalStackLayout>
-                <HorizontalStackLayout>
-                    <Label Text="High: "></Label>
-                    <Label IsVisible="{Binding IsCelsius}" Text="{Binding WeatherForecastDays[0].Day.MaxtempC, StringFormat='{0:F1}°'}"/>
-                    <Label IsVisible="{Binding IsFerenheit}" Text="{Binding WeatherForecastDays[0].Day.MaxtempF, StringFormat='{0:F1}°'}"/>
-                    <Label Text=" / "></Label>
-                    <Label Text="Low: "></Label>
-                    <Label IsVisible="{Binding IsCelsius}" Text="{Binding WeatherForecastDays[0].Day.MintempC, StringFormat='{0:F1}°'}"/>
-                    <Label IsVisible="{Binding IsFerenheit}" Text="{Binding WeatherForecastDays[0].Day.MintempF, StringFormat='{0:F1}°'}"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-            <VerticalStackLayout VerticalOptions="Center">
-                <Label Text="{Binding CurrentWeather.Condition.Text}" HorizontalOptions="End" FontAttributes="Bold" FontSize="18"/>
-                <HorizontalStackLayout HorizontalOptions="End">
-                    <Label Text="Feels like: "/>
-                    <Label IsVisible="{Binding IsCelsius}" Text="{Binding CurrentWeather.FeelslikeC, StringFormat='{0:F1}°'}" HorizontalOptions="Center"/>
-                    <Label IsVisible="{Binding IsFerenheit}" Text="{Binding CurrentWeather.FeelslikeF, StringFormat='{0:F1}°'}" HorizontalOptions="Center"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
-        </FlexLayout>
-
-        <AbsoluteLayout Margin="0, 50, 0, 0" HeightRequest="400">
-            <Frame Margin="20, 50, 0, 0" WidthRequest="350"
-                   HeightRequest="260" CornerRadius="40" BackgroundColor="{Binding TransparentBackground}">
-                <StackLayout VerticalOptions="Center" Margin="0, 20, 0, 0">
-                    <HorizontalStackLayout HorizontalOptions="Center">
-                        <Button Text="Hourly" Padding="0" WidthRequest="124" Margin="10, 0, 0, 0"
-                                    CornerRadius="10" HeightRequest="40" FontSize="18"
-                                    FontAttributes="Bold" BackgroundColor="{Binding PrimaryColor}" Command="{Binding ToggleCollectionHourly}"/>
-                        <Button Margin="20, 0, 0, 0" Text="Daily" Padding="0" 
-                            WidthRequest="124" CornerRadius="10"
-                            HeightRequest="40" FontSize="18" BackgroundColor="{Binding SecondaryColor}"
-                            TextColor="White" Command="{Binding ToggleCollectionDaily}"/>
+            <FlexLayout Margin="20, 0, 20, 150" JustifyContent="SpaceBetween">
+                <VerticalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding CurrentTemp, StringFormat='{0:F1}°'}" 
+                            TextColor="White"
+                            FontSize="40"
+                            FontFamily="Impact"
+                            FontAttributes="Bold" VerticalOptions="Center"/>
+                        <Image HeightRequest="100" WidthRequest="100" Source="{Binding CurrentWeather.Condition.Icon, StringFormat='https:{0}'}"/>
                     </HorizontalStackLayout>
-                    <CollectionView 
-                                IsVisible="{Binding IsHourly}"
-                                HeightRequest="160"
-                                ItemsSource="{Binding WeatherForecastHours}"
-                                VerticalScrollBarVisibility="Never"
-                                HorizontalScrollBarVisibility="Never">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Hour">
-                                <Frame Background="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=PrimaryColor}"
-                                    CornerRadius="15"
-                                    WidthRequest="70"
-                                    HeightRequest="130"
-                                    Margin="10, 50, 10, 30">
-                                    <VerticalStackLayout WidthRequest="80" VerticalOptions="Center">
-                                        <Image WidthRequest="50"
-                                            HeightRequest="50"
-                                            Source="{Binding Condition.Icon, StringFormat='https:{0}'}"
-                                           />
-                                        <Label Text="{Binding Time, StringFormat='{0}'}"
-                                    FontFamily="Calibri"
-                                    FontAttributes="Bold"
-                                    HorizontalTextAlignment="Center"
-                                    FontSize="14" Margin="0, 3, 0, 0"/>
-                                        <Label Text="{Binding TempC, StringFormat='{0:F1} °C'}"
-                                    FontSize="16"
-                                    FontFamily="Calibri" FontAttributes="Bold"
-                                    HorizontalTextAlignment="Center"
-                                    IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsCelsius}"/>
-                                        <Label Text="{Binding TempF, StringFormat='{0:F1} °F'}"
-                                            FontSize="16"
-                                            FontFamily="Calibri" FontAttributes="Bold"
-                                            HorizontalTextAlignment="Center"
-                                            IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsFerenheit}"/>
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                    <CollectionView 
-                                IsVisible="{Binding IsDaily}"
-                                HeightRequest="160"
-                                ItemsSource="{Binding WeatherForecastDays}"
-                                VerticalScrollBarVisibility="Never"
-                                HorizontalScrollBarVisibility="Never">
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
-                        </CollectionView.ItemsLayout>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="model:Forecastday">
-                                <Frame Background="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=PrimaryColor}"
-                                       CornerRadius="15"
-                                       WidthRequest="70"
-                                       HeightRequest="130"
-                                       Margin="22, 50, 10, 30">
-                                    <VerticalStackLayout WidthRequest="80" VerticalOptions="Center">
-                                        <Image WidthRequest="50"
-                                               HeightRequest="50"
-                                               Source="{Binding Day.Condition.Icon, StringFormat='https:{0}'}"/>
-                                        <Label Text="{Binding Date}"
-                                               FontFamily="Calibri"
-                                               FontAttributes="Bold"
-                                               HorizontalTextAlignment="Center"
-                                               FontSize="14" Margin="0, 3, 0, 0"/>
-                                        <Label Text="{Binding Day.AvgtempC, StringFormat='{0:F1} °C'}"
-                                               FontSize="16"
-                                               FontFamily="Calibri" FontAttributes="Bold"
-                                               HorizontalTextAlignment="Center"
-                                               IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsCelsius}"/>
-                                        <Label Text="{Binding Day.AvgtempF, StringFormat='{0:F1} °F'}"
-                                               FontSize="16"
-                                               FontFamily="Calibri" FontAttributes="Bold"
-                                               HorizontalTextAlignment="Center"
-                                               IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsFerenheit}"/>
-                                    </VerticalStackLayout>
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </StackLayout>
-            </Frame>
-        </AbsoluteLayout>
-    </StackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="High: "></Label>
+                        <Label IsVisible="{Binding IsCelsius}" Text="{Binding WeatherForecastDays[0].Day.MaxtempC, StringFormat='{0:F1}°'}"/>
+                        <Label IsVisible="{Binding IsFerenheit}" Text="{Binding WeatherForecastDays[0].Day.MaxtempF, StringFormat='{0:F1}°'}"/>
+                        <Label Text=" / "></Label>
+                        <Label Text="Low: "></Label>
+                        <Label IsVisible="{Binding IsCelsius}" Text="{Binding WeatherForecastDays[0].Day.MintempC, StringFormat='{0:F1}°'}"/>
+                        <Label IsVisible="{Binding IsFerenheit}" Text="{Binding WeatherForecastDays[0].Day.MintempF, StringFormat='{0:F1}°'}"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout>
+                        <Label Text="UV index: "></Label>
+                        <Label Text="{Binding CurrentWeather.Uv}"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+                <VerticalStackLayout VerticalOptions="Center">
+                    <Label Text="{Binding CurrentWeather.Condition.Text}" HorizontalOptions="End" FontAttributes="Bold" FontSize="18"/>
+                    <HorizontalStackLayout HorizontalOptions="End">
+                        <Label Text="Feels like: "/>
+                        <Label IsVisible="{Binding IsCelsius}" Text="{Binding CurrentWeather.FeelslikeC, StringFormat='{0:F1}°'}" HorizontalOptions="Center"/>
+                        <Label IsVisible="{Binding IsFerenheit}" Text="{Binding CurrentWeather.FeelslikeF, StringFormat='{0:F1}°'}" HorizontalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </FlexLayout>
+
+            <AbsoluteLayout Margin="0, 50, 0, 0" HeightRequest="350">
+                <Frame Margin="20, 50, 0, 0" WidthRequest="350"
+                       HeightRequest="260" CornerRadius="40" BackgroundColor="{Binding TransparentBackground}">
+                    <StackLayout VerticalOptions="Center" Margin="0, 20, 0, 0">
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Button Text="Hourly" Padding="0" WidthRequest="124" Margin="10, 0, 0, 0"
+                                        CornerRadius="10" HeightRequest="40" FontSize="18"
+                                        FontAttributes="Bold" BackgroundColor="{Binding PrimaryColor}" Command="{Binding ToggleCollectionHourly}"/>
+                            <Button Margin="20, 0, 0, 0" Text="Daily" Padding="0" 
+                                WidthRequest="124" CornerRadius="10"
+                                HeightRequest="40" FontSize="18" BackgroundColor="{Binding SecondaryColor}"
+                                TextColor="White" Command="{Binding ToggleCollectionDaily}"/>
+                        </HorizontalStackLayout>
+                        <CollectionView 
+                                    IsVisible="{Binding IsHourly}"
+                                    HeightRequest="160"
+                                    ItemsSource="{Binding WeatherForecastHours}"
+                                    VerticalScrollBarVisibility="Never"
+                                    HorizontalScrollBarVisibility="Never">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Hour">
+                                    <Frame Background="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=PrimaryColor}"
+                                        CornerRadius="15"
+                                        WidthRequest="70"
+                                        HeightRequest="130"
+                                        Margin="10, 50, 10, 30">
+                                        <VerticalStackLayout WidthRequest="80" VerticalOptions="Center">
+                                            <Image WidthRequest="50"
+                                                HeightRequest="50"
+                                                Source="{Binding Condition.Icon, StringFormat='https:{0}'}"
+                                               />
+                                            <Label Text="{Binding Time, StringFormat='{0}'}"
+                                        FontFamily="Calibri"
+                                        FontAttributes="Bold"
+                                        HorizontalTextAlignment="Center"
+                                        FontSize="14" Margin="0, 3, 0, 0"/>
+                                            <Label Text="{Binding TempC, StringFormat='{0:F1} °C'}"
+                                        FontSize="16"
+                                        FontFamily="Calibri" FontAttributes="Bold"
+                                        HorizontalTextAlignment="Center"
+                                        IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsCelsius}"/>
+                                            <Label Text="{Binding TempF, StringFormat='{0:F1} °F'}"
+                                                FontSize="16"
+                                                FontFamily="Calibri" FontAttributes="Bold"
+                                                HorizontalTextAlignment="Center"
+                                                IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsFerenheit}"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <CollectionView 
+                                    IsVisible="{Binding IsDaily}"
+                                    HeightRequest="160"
+                                    ItemsSource="{Binding WeatherForecastDays}"
+                                    VerticalScrollBarVisibility="Never"
+                                    HorizontalScrollBarVisibility="Never">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Forecastday">
+                                    <Frame Background="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=PrimaryColor}"
+                                           CornerRadius="15"
+                                           WidthRequest="70"
+                                           HeightRequest="130"
+                                           Margin="22, 50, 10, 30">
+                                        <VerticalStackLayout WidthRequest="80" VerticalOptions="Center">
+                                            <Image WidthRequest="50"
+                                                   HeightRequest="50"
+                                                   Source="{Binding Day.Condition.Icon, StringFormat='https:{0}'}"/>
+                                            <Label Text="{Binding Date}"
+                                                   FontFamily="Calibri"
+                                                   FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   FontSize="14" Margin="0, 3, 0, 0"/>
+                                            <Label Text="{Binding Day.AvgtempC, StringFormat='{0:F1} °C'}"
+                                                   FontSize="16"
+                                                   FontFamily="Calibri" FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsCelsius}"/>
+                                            <Label Text="{Binding Day.AvgtempF, StringFormat='{0:F1} °F'}"
+                                                   FontSize="16"
+                                                   FontFamily="Calibri" FontAttributes="Bold"
+                                                   HorizontalTextAlignment="Center"
+                                                   IsVisible="{Binding Source={RelativeSource AncestorType={x:Type viewmodel:HomeViewModel}}, Path=IsFerenheit}"/>
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </Frame>
+            </AbsoluteLayout>
+
+            <Label Margin="20, 0, 0, 0" FontSize="21" FontAttributes="Bold" Text="Conditions"></Label>
+
+            <Grid HorizontalOptions="Center" RowSpacing="10" ColumnSpacing="10" Margin="0, 0, 0, 120">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="130"/>
+                    <RowDefinition Height="130"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="170"/>
+                </Grid.ColumnDefinitions>
+
+                <Frame Grid.Row="0" Grid.Column="0" Margin="0, 0, 0, 0" 
+                    CornerRadius="20" 
+                    BackgroundColor="{Binding TransparentBackground}">
+                    <StackLayout HorizontalOptions="Start">
+                        <Label Text="Wind"></Label>
+                        <FlexLayout>
+                            <Image Source="wind.svg"></Image>
+                            <StackLayout VerticalOptions="Center">
+                                <FlexLayout>
+                                    <Label FontSize="21" Text="{Binding CurrentWeather.WindKph}"></Label>
+                                    <Label Padding="0, 7, 0, 0" Text="km/h"></Label>
+                                </FlexLayout>
+                                <FlexLayout>
+                                    <Label Text="Dir: "></Label>
+                                    <Label Text="{Binding CurrentWeather.WindDir}"></Label>
+                                </FlexLayout>
+                            </StackLayout>
+                        </FlexLayout>
+                    </StackLayout>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="1"  Margin="0, 0, 0, 0" 
+                        CornerRadius="20" 
+                        BackgroundColor="{Binding TransparentBackground}">
+                    <StackLayout HorizontalOptions="Start">
+                        <Label Text="Humidity"></Label>
+                        <FlexLayout>
+                            <Image Source="humidity.svg"></Image>
+                            <StackLayout VerticalOptions="Center" Orientation="Horizontal">
+                                <Label FontSize="21" Text="{Binding CurrentWeather.Humidity}"></Label>
+                                <Label Padding="0, 7, 0, 0" Text="%"></Label>
+                            </StackLayout>
+                        </FlexLayout>
+                    </StackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="0"  Margin="0, 0, 0, 0" 
+                        CornerRadius="20" 
+                        BackgroundColor="{Binding TransparentBackground}">
+                    <StackLayout HorizontalOptions="Start">
+                        <Label Text="Pressure"></Label>
+                        <FlexLayout>
+                            <Image Source="barometer.svg"></Image>
+                            <StackLayout VerticalOptions="Center">
+                                <Label FontSize="21" Text="{Binding CurrentWeather.PressureMb}"></Label>
+                                <Label Text="mBar"></Label>
+                            </StackLayout>
+                        </FlexLayout>
+                    </StackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="1"  Margin="0, 0, 0, 0" 
+                        CornerRadius="20" 
+                        BackgroundColor="{Binding TransparentBackground}">
+                    <StackLayout HorizontalOptions="Start">
+                        <Label Text="Sunrise/Sunset"></Label>
+                        <FlexLayout>
+                            <Image Source="sunrise.svg"></Image>
+                            <StackLayout VerticalOptions="Center">
+                                <Label Text="{Binding WeatherForecastDays[0].Astro.Sunrise}"></Label>
+                                <Label Text="{Binding WeatherForecastDays[0].Astro.Sunset}"></Label>
+                            </StackLayout>
+                        </FlexLayout>
+                    </StackLayout>
+                </Frame>
+            </Grid>
+
+            <FlexLayout Background="{Binding SecondaryColor}" HeightRequest="50" JustifyContent="Center" AlignItems="Center">
+                <Label
+		            Text="Povered by:    "
+		            SemanticProperties.HeadingLevel="Level1"
+		            FontSize="Default"
+		            HorizontalOptions="Center" />
+
+                <Label
+		            Text="weatherapi.com"
+		            TextDecorations="Underline"
+		            TextColor="Blue"
+		            SemanticProperties.HeadingLevel="Level1"
+		            FontSize="Default"
+		            HorizontalOptions="Center" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenWeatherApiCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </FlexLayout>
+
+        </StackLayout>
+    </ScrollView>
     <!--<Grid RowSpacing="0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

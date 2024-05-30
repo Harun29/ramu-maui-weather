@@ -1,4 +1,5 @@
-﻿using WeatherAPI.Standard.Models;
+﻿using System.Windows.Input;
+using WeatherAPI.Standard.Models;
 using WeatherApp.ViewModel;
 
 namespace WeatherApp.View;

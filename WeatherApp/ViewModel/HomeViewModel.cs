@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WeatherAPI.Standard.Models;
@@ -9,6 +10,8 @@ namespace WeatherApp.ViewModel;
 [QueryProperty(nameof(LocationName), "location")]
 public partial class HomeViewModel : BaseViewModel
 {
+    public static HomeViewModel Instance { get; private set; }
+
     IConnectivityService _connectivityService;
     ILocationService _locationService;
     IWeatherService _weatherService;
@@ -56,6 +59,8 @@ public partial class HomeViewModel : BaseViewModel
     public RelayCommand ToggleCelsiusFerenheit { get; set; }
     public RelayCommand ToggleCollectionHourly { get; set; }
     public RelayCommand ToggleCollectionDaily { get; set; }
+    public RelayCommand OpenWeatherApiCommand { get; }
+
     public HomeViewModel(IConnectivityService connectivityService, ILocationService locationService,
         IWeatherService weatherService, IAlertService alertService)
     {
@@ -68,9 +73,17 @@ public partial class HomeViewModel : BaseViewModel
         ToggleCelsiusFerenheit = new RelayCommand(ToggleTemperatureUnit);
         ToggleCollectionHourly = new RelayCommand(ToggleHourly);
         ToggleCollectionDaily = new RelayCommand(ToggleDaily);
+        OpenWeatherApiCommand = new RelayCommand(OpenWeatherApi);
+        Instance = this;
     }
-    [RelayCommand]
 
+    private async void OpenWeatherApi()
+    {
+        var uri = new Uri("https://weatherapi.com");
+        await Launcher.Default.OpenAsync(uri);
+    }
+
+    [RelayCommand]
     private async Task ToggleFavorites()
     {
         // Toggle between displaying the Home page and the Favorites page
@@ -224,6 +237,12 @@ public partial class HomeViewModel : BaseViewModel
         PrimaryColor = stylesColors["primary"];
         SecondaryColor = stylesColors["secondary"];
         TransparentBackground = stylesColors["transparentBackground"];
+
+        if (FavouritesViewModel.Instance != null)
+        {
+            FavouritesViewModel.Instance.PrimaryColor = PrimaryColor;
+            FavouritesViewModel.Instance.SecondaryColor = SecondaryColor;
+        }
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
