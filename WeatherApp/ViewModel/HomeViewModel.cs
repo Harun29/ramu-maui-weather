@@ -10,6 +10,8 @@ namespace WeatherApp.ViewModel;
 [QueryProperty(nameof(LocationName), "location")]
 public partial class HomeViewModel : BaseViewModel
 {
+    public static HomeViewModel Instance { get; private set; }
+
     IConnectivityService _connectivityService;
     ILocationService _locationService;
     IWeatherService _weatherService;
@@ -72,6 +74,7 @@ public partial class HomeViewModel : BaseViewModel
         ToggleCollectionHourly = new RelayCommand(ToggleHourly);
         ToggleCollectionDaily = new RelayCommand(ToggleDaily);
         OpenWeatherApiCommand = new RelayCommand(OpenWeatherApi);
+        Instance = this;
     }
 
     private async void OpenWeatherApi()
@@ -234,6 +237,12 @@ public partial class HomeViewModel : BaseViewModel
         PrimaryColor = stylesColors["primary"];
         SecondaryColor = stylesColors["secondary"];
         TransparentBackground = stylesColors["transparentBackground"];
+
+        if (FavouritesViewModel.Instance != null)
+        {
+            FavouritesViewModel.Instance.PrimaryColor = PrimaryColor;
+            FavouritesViewModel.Instance.SecondaryColor = SecondaryColor;
+        }
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
