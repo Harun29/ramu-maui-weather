@@ -3,7 +3,9 @@
     x:Class="WeatherApp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:view="clr-namespace:WeatherApp.View">
+    xmlns:view="clr-namespace:WeatherApp.View"
+    Shell.NavBarHasShadow="False"
+    Shell.NavBarIsVisible="False">
 
     <FlyoutItem Title="Menu" FlyoutDisplayOptions="AsSingleItem">
         <ShellContent Route="HomePage" ContentTemplate="{DataTemplate view:HomePage}" />

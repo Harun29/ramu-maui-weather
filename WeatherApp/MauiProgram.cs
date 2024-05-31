@@ -38,9 +38,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<FavouritesViewModel>();
         builder.Services.AddSingleton<FavouritesPage>();
 
-        builder.Services.AddSingleton<AboutViewModel>();
-        builder.Services.AddSingleton<AboutPage>();
-
         return builder.Build();
     }
 }
