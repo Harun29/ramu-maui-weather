@@ -15,7 +15,7 @@
     <ScrollView VerticalScrollBarVisibility="Never">
         <StackLayout>
             <FlexLayout Margin="20, 20, 20, 20" JustifyContent="SpaceBetween">
-                <Button Padding="0" BackgroundColor="Transparent" Command="{Binding ToggleCelsiusFerenheit}"  Text="{Binding ButtonText}" FontSize="32"/>
+                <Button TextColor="White" Padding="0" BackgroundColor="Transparent" Command="{Binding ToggleCelsiusFerenheit}"  Text="{Binding ButtonText}" FontSize="32"/>
                 <Label Text="{Binding CurrentLocation.Name}" 
                        TextColor="White" 
                        HorizontalTextAlignment="Center"
@@ -67,19 +67,22 @@
                 </VerticalStackLayout>
             </FlexLayout>
 
-            <AbsoluteLayout Margin="0, 50, 0, 0" HeightRequest="350">
-                <Frame Margin="20, 50, 0, 0" WidthRequest="350"
+            <AbsoluteLayout Margin="0, 50, 0, 0" HeightRequest="350" HorizontalOptions="Center">
+                <Frame Margin="0, 50, 0, 0" WidthRequest="350"
                        HeightRequest="260" CornerRadius="40" BackgroundColor="{Binding TransparentBackground}">
                     <StackLayout VerticalOptions="Center" Margin="0, 20, 0, 0">
-                        <HorizontalStackLayout HorizontalOptions="Center">
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Button Text="Hourly" Padding="0" WidthRequest="124" Margin="10, 0, 0, 0"
-                                        CornerRadius="10" HeightRequest="40" FontSize="18"
-                                        FontAttributes="Bold" BackgroundColor="{Binding PrimaryColor}" Command="{Binding ToggleCollectionHourly}"/>
-                            <Button Margin="20, 0, 0, 0" Text="Daily" Padding="0" 
-                                WidthRequest="124" CornerRadius="10"
-                                HeightRequest="40" FontSize="18" BackgroundColor="{Binding SecondaryColor}"
-                                TextColor="White" Command="{Binding ToggleCollectionDaily}"/>
-                        </HorizontalStackLayout>
+                                    CornerRadius="10" HeightRequest="40" FontSize="18"
+                                    Command="{Binding ToggleCollectionHourly}" BackgroundColor="{Binding FirstButtonBackgroundColor}" FontAttributes="{Binding FirstButtonFontAttrbute}">
+                            </Button>
+                            <Button Margin="20, 0, 0, 0" Text="Daily" Padding="0" WidthRequest="124"
+                                    CornerRadius="10" HeightRequest="40" FontSize="18"
+                                    Command="{Binding ToggleCollectionDaily}" BackgroundColor="{Binding SecondButtonBackgroundColor}" FontAttributes="{Binding SecondButtonFontAttrbute}">
+                            </Button>
+                        </StackLayout>
+
                         <CollectionView 
                                     IsVisible="{Binding IsHourly}"
                                     HeightRequest="160"
@@ -257,7 +260,7 @@
 		            TextColor="Blue"
 		            SemanticProperties.HeadingLevel="Level1"
 		            FontSize="Default"
-		            HorizontalOptions="Center" >
+		            HorizontalOptions="Center">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding OpenWeatherApiCommand}" />
                     </Label.GestureRecognizers>

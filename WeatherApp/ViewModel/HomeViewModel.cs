@@ -48,7 +48,15 @@ public partial class HomeViewModel : BaseViewModel
     [ObservableProperty]
     bool isHourly = true;
     [ObservableProperty]
-    bool isDaily = true;
+    bool isDaily = false;
+    [ObservableProperty]
+    Color firstButtonBackgroundColor;
+    [ObservableProperty]
+    Color secondButtonBackgroundColor;
+    [ObservableProperty]
+    FontAttributes firstButtonFontAttrbute = FontAttributes.Bold;
+    [ObservableProperty]
+    FontAttributes secondButtonFontAttrbute = FontAttributes.None;
 
     private Dictionary<string, Color> stylesColors  =new ()
         {
@@ -110,18 +118,15 @@ public partial class HomeViewModel : BaseViewModel
     {
         IsHourly = true;
         IsDaily = false;
-
-        OnPropertyChanged(nameof(IsHourly));
-        OnPropertyChanged(nameof(IsDaily));
-
+        FirstButtonBackgroundColor = PrimaryColor; SecondButtonBackgroundColor = SecondaryColor;
+        FirstButtonFontAttrbute = FontAttributes.Bold; SecondButtonFontAttrbute = FontAttributes.None;
     }
     private void ToggleDaily()
     {
         IsHourly = false;
         IsDaily = true;
-
-        OnPropertyChanged(nameof(IsHourly));
-        OnPropertyChanged(nameof(IsDaily));
+        FirstButtonBackgroundColor = SecondaryColor; SecondButtonBackgroundColor = PrimaryColor;
+        FirstButtonFontAttrbute = FontAttributes.None; SecondButtonFontAttrbute = FontAttributes.Bold;
     }
 
 
@@ -237,6 +242,7 @@ public partial class HomeViewModel : BaseViewModel
         PrimaryColor = stylesColors["primary"];
         SecondaryColor = stylesColors["secondary"];
         TransparentBackground = stylesColors["transparentBackground"];
+        FirstButtonBackgroundColor = PrimaryColor; SecondButtonBackgroundColor = SecondaryColor;
 
         if (FavouritesViewModel.Instance != null)
         {
