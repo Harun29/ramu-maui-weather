@@ -12,7 +12,7 @@
         <toolkit:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
     </ContentPage.Behaviors>
 
-    <ScrollView>
+    <ScrollView VerticalScrollBarVisibility="Never">
         <StackLayout>
             <FlexLayout Margin="20, 20, 20, 20" JustifyContent="SpaceBetween">
                 <Button Padding="0" BackgroundColor="Transparent" Command="{Binding ToggleCelsiusFerenheit}"  Text="{Binding ButtonText}" FontSize="32"/>
@@ -25,7 +25,7 @@
                        FontSize="30"
                        Padding="0"
                        Margin="0, 0, 0, 0"/>
-                <ImageButton HorizontalOptions="Center" Source="menu.png" HeightRequest="50" WidthRequest="30" Command="{Binding ToggleFavoritesCommand}"/>
+                <ImageButton HorizontalOptions="Center" Source="plus.png" HeightRequest="50" WidthRequest="30" Command="{Binding ToggleFavoritesCommand}"/>
             </FlexLayout>
 
             <StackLayout Margin="20, 0, 0, 0" Orientation="Horizontal">
@@ -246,7 +246,7 @@
 
             <FlexLayout Background="{Binding SecondaryColor}" HeightRequest="50" JustifyContent="Center" AlignItems="Center">
                 <Label
-		            Text="Povered by:    "
+		            Text="Powered by:    "
 		            SemanticProperties.HeadingLevel="Level1"
 		            FontSize="Default"
 		            HorizontalOptions="Center" />

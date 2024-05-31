@@ -52,6 +52,7 @@
 		<MauiFont Remove="Resources\Images\delete.png" />
 		<MauiFont Remove="Resources\Images\menu.png" />
 		<MauiFont Remove="Resources\Images\night.png" />
+		<MauiFont Remove="Resources\Images\plus.png" />
 		<MauiFont Remove="Resources\Images\rainy.gif" />
 		<MauiFont Remove="Resources\Images\snow.jpg" />
 		<MauiFont Remove="Resources\Images\sunny.png" />
@@ -70,6 +71,7 @@
 	<ItemGroup>
 	  <None Remove="Resources\Images\arrow.png" />
 	  <None Remove="Resources\Images\menu.png" />
+	  <None Remove="Resources\Images\plus.png" />
 	  <None Remove="View\" />
 	  <None Remove="ViewModel\" />
 	  <None Remove="Resources\Images\" />
@@ -118,6 +120,7 @@
 	  <MauiImage Include="Resources\Images\humidity.svg" />
 	  <MauiImage Include="Resources\Images\menu.png" />
 	  <MauiImage Include="Resources\Images\night.png" />
+	  <MauiImage Include="Resources\Images\plus.png" />
 	  <MauiImage Include="Resources\Images\rainy.gif" />
 	  <MauiImage Include="Resources\Images\snow.jpg" />
 	  <MauiImage Include="Resources\Images\sunny.png" />
@@ -139,4 +142,5 @@
 	<ItemGroup>
 	  <BundleResource Include="Resources\Images\delete.png" />
 	</ItemGroup>
+	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadUnhandledDeviceExceptionWeatherAppHideInfoBar="True" /></VisualStudio></ProjectExtensions>
 </Project>
