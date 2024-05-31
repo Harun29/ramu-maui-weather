@@ -189,7 +189,7 @@
                             <Image Source="wind.svg"></Image>
                             <StackLayout VerticalOptions="Center">
                                 <FlexLayout>
-                                    <Label FontSize="21" Text="{Binding CurrentWeather.WindKph}"></Label>
+                                    <Label FontSize="21" Text="{Binding CurrentWeather.WindKph, StringFormat='{0:00}'}"></Label>
                                     <Label Padding="0, 7, 0, 0" Text="km/h"></Label>
                                 </FlexLayout>
                                 <FlexLayout>

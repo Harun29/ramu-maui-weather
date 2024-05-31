@@ -27,6 +27,14 @@ public partial class HomeViewModel : BaseViewModel
     Current currentWeather;
     [ObservableProperty]
     ObservableCollection<Hour> weatherForecastHours;
+
+    [ObservableProperty]
+    ObservableCollection<Hour> weatherForecastToday;
+    [ObservableProperty]
+    ObservableCollection<Hour> weatherForecastTomorrow;
+    [ObservableProperty]
+    ObservableCollection<Hour> weatherForecastDayAfter;
+
     [ObservableProperty]
     ObservableCollection<Forecastday> weatherForecastDays;
     [ObservableProperty]
@@ -252,6 +260,9 @@ public partial class HomeViewModel : BaseViewModel
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
+        WeatherForecastToday = new ObservableCollection<Hour>(forecastWeather.Forecast.Forecastday[0].Hour);
+        WeatherForecastTomorrow = new ObservableCollection<Hour>(forecastWeather.Forecast.Forecastday[1].Hour);
+        WeatherForecastDayAfter = new ObservableCollection<Hour>(forecastWeather.Forecast.Forecastday[2].Hour);
 
         // Sets next 3 days forecast and modifies day property to display day name
         var forecastDays = new ObservableCollection<Forecastday>(forecastWeather.Forecast.Forecastday);
