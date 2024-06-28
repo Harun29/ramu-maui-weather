@@ -129,6 +129,7 @@
                                     HeightRequest="160"
                                     ItemsSource="{Binding WeatherForecastDays}"
                                     VerticalScrollBarVisibility="Never"
+                                    HorizontalScrollBarVisibility="Never"
                                     >
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
