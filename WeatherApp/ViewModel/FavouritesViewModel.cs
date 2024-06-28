@@ -24,6 +24,8 @@ public partial class FavouritesViewModel : BaseViewModel
     ObservableCollection<CurrentJsonResponse> favouriteLocations;
     [ObservableProperty]
     ObservableCollection<CurrentJsonResponse> searchResults;
+    [ObservableProperty]
+    CurrentJsonResponse currentLocationData;
     public FavouritesViewModel(ILocationService locationService, IWeatherService weatherService,
         IAlertService alertService, IStorageService storageService)
     {
@@ -37,6 +39,7 @@ public partial class FavouritesViewModel : BaseViewModel
 
         SearchResults = new ObservableCollection<CurrentJsonResponse>();
         FavouriteLocations = new ObservableCollection<CurrentJsonResponse>();
+        CurrentLocationData = new CurrentJsonResponse();
         MainThread.InvokeOnMainThreadAsync(PopulateFavouritesList);
         PrimaryColor = HomeViewModel.Instance.PrimaryColor;
         SecondaryColor = HomeViewModel.Instance.SecondaryColor;
@@ -48,7 +51,7 @@ public partial class FavouritesViewModel : BaseViewModel
         var data = _weatherService.GetCurrentData(q);
         data.Location.Localtime = data.Location.Localtime.Substring(11);
 
-        FavouriteLocations.Add(data);
+        CurrentLocationData = data;
     }
 
     async Task PopulateFavouritesList()
@@ -67,7 +70,6 @@ public partial class FavouritesViewModel : BaseViewModel
 
             FavouriteLocations.Add(data);
         }
-
         IsBusy = false;
     }
     [RelayCommand]

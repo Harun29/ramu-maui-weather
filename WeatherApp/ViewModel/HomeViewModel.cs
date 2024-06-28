@@ -200,8 +200,14 @@ public partial class HomeViewModel : BaseViewModel
                 BackgroundUrl = "night.png";
                 break;
         }
-
-        if (CurrentWeather.Condition.Text.ToLower().Contains("rain"))
+        if (CurrentWeather.Condition.Text.ToLower().Contains("thunder"))
+        {
+            stylesColors["primary"] = Color.FromArgb("#644950");
+            stylesColors["secondary"] = Color.FromArgb("#88636D");
+            stylesColors["transparentBackground"] = Color.FromArgb("#50644950");
+            BackgroundUrl = "thunder.jpg";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("rain"))
         {
             stylesColors["primary"] = Color.FromArgb("#60728d");
             stylesColors["secondary"] = Color.FromArgb("#7B8CA5");
@@ -214,13 +220,6 @@ public partial class HomeViewModel : BaseViewModel
             stylesColors["secondary"] = Color.FromArgb("#658EC4");
             stylesColors["transparentBackground"] = Color.FromArgb("#504577b6");
             BackgroundUrl = "snow.jpg";
-        }
-        else if (CurrentWeather.Condition.Text.ToLower().Contains("thunder"))
-        {
-            stylesColors["primary"] = Color.FromArgb("#644950");
-            stylesColors["secondary"] = Color.FromArgb("#88636D");
-            stylesColors["transparentBackground"] = Color.FromArgb("#50644950");
-            BackgroundUrl = "thunder.jpg";
         }
         else if (CurrentWeather.Condition.Text.ToLower().Contains("cloud") || CurrentWeather.Condition.Text.ToLower().Contains("overcast"))
         {
@@ -250,13 +249,15 @@ public partial class HomeViewModel : BaseViewModel
         PrimaryColor = stylesColors["primary"];
         SecondaryColor = stylesColors["secondary"];
         TransparentBackground = stylesColors["transparentBackground"];
-        FirstButtonBackgroundColor = PrimaryColor; SecondButtonBackgroundColor = SecondaryColor;
+        FirstButtonBackgroundColor = stylesColors["primary"]; 
+        SecondButtonBackgroundColor = stylesColors["secondary"];
 
         if (FavouritesViewModel.Instance != null)
         {
             FavouritesViewModel.Instance.PrimaryColor = PrimaryColor;
             FavouritesViewModel.Instance.SecondaryColor = SecondaryColor;
         }
+
 
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
