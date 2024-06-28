@@ -58,7 +58,7 @@
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
                 <VerticalStackLayout VerticalOptions="Center">
-                    <Label Text="{Binding CurrentWeather.Condition.Text}" HorizontalOptions="End" FontAttributes="Bold" FontSize="18"/>
+                    <Label Text="{Binding CurrentWeather.Condition.Text}" MaximumWidthRequest="150" HorizontalOptions="End" HorizontalTextAlignment="End" FontAttributes="Bold" FontSize="18"/>
                     <HorizontalStackLayout HorizontalOptions="End">
                         <Label Text="Feels like: "/>
                         <Label IsVisible="{Binding IsCelsius}" Text="{Binding CurrentWeather.FeelslikeC, StringFormat='{0:F1}°'}" HorizontalOptions="Center"/>
@@ -74,11 +74,11 @@
 
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Button Text="Hourly" Padding="0" WidthRequest="124" Margin="10, 0, 0, 0"
-                                    CornerRadius="10" HeightRequest="40" FontSize="18"
+                                    CornerRadius="10" HeightRequest="40" FontSize="18" TextColor="White"
                                     Command="{Binding ToggleCollectionHourly}" BackgroundColor="{Binding FirstButtonBackgroundColor}" FontAttributes="{Binding FirstButtonFontAttrbute}">
                             </Button>
                             <Button Margin="20, 0, 0, 0" Text="Daily" Padding="0" WidthRequest="124"
-                                    CornerRadius="10" HeightRequest="40" FontSize="18"
+                                    CornerRadius="10" HeightRequest="40" FontSize="18" TextColor="White"
                                     Command="{Binding ToggleCollectionDaily}" BackgroundColor="{Binding SecondButtonBackgroundColor}" FontAttributes="{Binding SecondButtonFontAttrbute}">
                             </Button>
                         </StackLayout>
@@ -129,7 +129,8 @@
                                     HeightRequest="160"
                                     ItemsSource="{Binding WeatherForecastDays}"
                                     VerticalScrollBarVisibility="Never"
-                                    HorizontalScrollBarVisibility="Never">
+                                    HorizontalScrollBarVisibility="Never"
+                                    >
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Horizontal" SnapPointsAlignment="Start"/>
                             </CollectionView.ItemsLayout>
@@ -189,7 +190,7 @@
                             <Image Source="wind.svg"></Image>
                             <StackLayout VerticalOptions="Center">
                                 <FlexLayout>
-                                    <Label FontSize="21" Text="{Binding CurrentWeather.WindKph}"></Label>
+                                    <Label FontSize="21" Text="{Binding CurrentWeather.WindKph, StringFormat='{0:00}'}"></Label>
                                     <Label Padding="0, 7, 0, 0" Text="km/h"></Label>
                                 </FlexLayout>
                                 <FlexLayout>

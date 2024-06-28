@@ -27,6 +27,14 @@ public partial class HomeViewModel : BaseViewModel
     Current currentWeather;
     [ObservableProperty]
     ObservableCollection<Hour> weatherForecastHours;
+
+    [ObservableProperty]
+    ObservableCollection<Hour> weatherForecastToday;
+    [ObservableProperty]
+    ObservableCollection<Hour> weatherForecastTomorrow;
+    [ObservableProperty]
+    ObservableCollection<Hour> weatherForecastDayAfter;
+
     [ObservableProperty]
     ObservableCollection<Forecastday> weatherForecastDays;
     [ObservableProperty]
@@ -192,8 +200,14 @@ public partial class HomeViewModel : BaseViewModel
                 BackgroundUrl = "night.png";
                 break;
         }
-
-        if (CurrentWeather.Condition.Text.ToLower().Contains("rain"))
+        if (CurrentWeather.Condition.Text.ToLower().Contains("thunder"))
+        {
+            stylesColors["primary"] = Color.FromArgb("#644950");
+            stylesColors["secondary"] = Color.FromArgb("#88636D");
+            stylesColors["transparentBackground"] = Color.FromArgb("#50644950");
+            BackgroundUrl = "thunder.jpg";
+        }
+        else if (CurrentWeather.Condition.Text.ToLower().Contains("rain"))
         {
             stylesColors["primary"] = Color.FromArgb("#60728d");
             stylesColors["secondary"] = Color.FromArgb("#7B8CA5");
@@ -206,13 +220,6 @@ public partial class HomeViewModel : BaseViewModel
             stylesColors["secondary"] = Color.FromArgb("#658EC4");
             stylesColors["transparentBackground"] = Color.FromArgb("#504577b6");
             BackgroundUrl = "snow.jpg";
-        }
-        else if (CurrentWeather.Condition.Text.ToLower().Contains("thunder"))
-        {
-            stylesColors["primary"] = Color.FromArgb("#644950");
-            stylesColors["secondary"] = Color.FromArgb("#88636D");
-            stylesColors["transparentBackground"] = Color.FromArgb("#50644950");
-            BackgroundUrl = "thunder.jpg";
         }
         else if (CurrentWeather.Condition.Text.ToLower().Contains("cloud") || CurrentWeather.Condition.Text.ToLower().Contains("overcast"))
         {
@@ -242,7 +249,8 @@ public partial class HomeViewModel : BaseViewModel
         PrimaryColor = stylesColors["primary"];
         SecondaryColor = stylesColors["secondary"];
         TransparentBackground = stylesColors["transparentBackground"];
-        FirstButtonBackgroundColor = PrimaryColor; SecondButtonBackgroundColor = SecondaryColor;
+        FirstButtonBackgroundColor = stylesColors["primary"]; 
+        SecondButtonBackgroundColor = stylesColors["secondary"];
 
         if (FavouritesViewModel.Instance != null)
         {
@@ -250,8 +258,12 @@ public partial class HomeViewModel : BaseViewModel
             FavouritesViewModel.Instance.SecondaryColor = SecondaryColor;
         }
 
+
         // Sets weather data for next 24 hours
         WeatherForecastHours = SetNext24HoursData(forecastWeather);
+        WeatherForecastToday = new ObservableCollection<Hour>(forecastWeather.Forecast.Forecastday[0].Hour);
+        WeatherForecastTomorrow = new ObservableCollection<Hour>(forecastWeather.Forecast.Forecastday[1].Hour);
+        WeatherForecastDayAfter = new ObservableCollection<Hour>(forecastWeather.Forecast.Forecastday[2].Hour);
 
         // Sets next 3 days forecast and modifies day property to display day name
         var forecastDays = new ObservableCollection<Forecastday>(forecastWeather.Forecast.Forecastday);

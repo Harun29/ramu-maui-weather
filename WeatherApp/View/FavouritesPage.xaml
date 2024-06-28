@@ -23,7 +23,7 @@
             <VerticalStackLayout IsVisible="{Binding IsNotBusy}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0">
                 <HorizontalStackLayout VerticalOptions="Center" Margin="20, 20, 0, 0">
                     <ImageButton 
-                        Source="arrow.png" 
+                        Source="arrow.png"
                         WidthRequest="30" 
                         Padding="0" 
                         Margin="0, 0, 20, 0"
@@ -43,6 +43,7 @@
                     <SearchBar x:Name="searchBar"
                        TextChanged="OnTextChanged"
                         Placeholder="Search locations..."
+                        TextColor="White"
                         Background="{Binding PrimaryColor}"
                         Margin="0, 0, 0, -2"/>
                     
@@ -89,6 +90,56 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <Label Text="Your Location"
+                       FontSize="24"
+                       Margin="20"
+                       FontAttributes="Bold"
+                       FontFamily="Calibri"/>
+                 
+                <Frame Background="{Binding PrimaryColor}"
+                        HeightRequest="145"
+                        Margin="10, 10"
+                        CornerRadius="20"
+                        WidthRequest="360"
+                        Padding="5">
+                    <Grid ColumnDefinitions="3*, 3*">
+                        <VerticalStackLayout Grid.Column="0">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding GoToCityDataCommand}"
+                                    CommandParameter="{Binding CurrentLocationData.Location.Name}"/>
+                            </VerticalStackLayout.GestureRecognizers>
+                            <StackLayout Orientation="Horizontal" Margin="15, 10, 0, 0">
+                                <Label Text="{Binding CurrentLocationData.Location.Name}"
+                                       FontSize="17"
+                                       TextColor="{StaticResource Secondary}"
+                                       HorizontalTextAlignment="Center"/>
+                                <Label Text=", "
+                                       FontSize="17"
+                                       TextColor="{StaticResource Secondary}"
+                                       HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding CurrentLocationData.Location.Country}"
+                                       FontSize="17"
+                                       TextColor="{StaticResource Secondary}"
+                                       HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                            <Label Text="{Binding CurrentLocationData.Current.TempC, StringFormat='{0:F1}°'}"
+                                    FontSize="50"
+                                    FontFamily="Imprima"
+                                    Margin="20, 0, 0, 0"/>
+                            <Label Text="{Binding CurrentLocationData.Current.FeelslikeC, StringFormat='Feels like {0:F1} °C'}"
+                                    FontSize="14"
+                                    TextColor="{StaticResource Secondary}"
+                                    Margin="15, 0, 0, 0"/>
+                        </VerticalStackLayout>
+                        <Image  WidthRequest="100"
+                                Margin="20, 5, 0, 0"
+                                HeightRequest="100"
+                                Grid.Column="1"
+                                Source="{Binding CurrentLocationData.Current.Condition.Icon, StringFormat='https:{0}'}"/>
+                    </Grid>
+                </Frame>
 
                 <Label Text="Recently Added"
                        FontSize="24"
